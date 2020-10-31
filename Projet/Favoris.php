@@ -14,13 +14,23 @@ ________________________________________________________________________________
 session_start();
 include 'Donnees.inc.php';
 
-if (isset($_POST['login'])){
+if (!empty($_POST['login'])){
     $_SESSION['login'] = $_POST['login'];
+}
+
+if (isset($_POST['idcocktail'])){
+    include 'Favoris.funct.php';
+    include 'Favoris.inc.php';
+    if ($_POST['mode'] == 'Add') {
+        addFav(intval($_POST['idcocktail']), $Favoris);
+    }else {
+        delFav(intval($_POST['idcocktail']), $Favoris);
+    }
 }
 
 if (isset($_SESSION['login'])){
     include 'Favoris.inc.php';
-    include 'Favoris.funct.php';
+    include_once 'Favoris.funct.php';
 }
 ?>
 
@@ -59,9 +69,15 @@ if (isset($_SESSION['login'])){
                     ?>
 
                     <?php
-                    if (IsFav(0)) echo "la recette 0 est favori"; // Test pour IsFav()
+                    if (IsFav(0, $Favoris)) echo "la recette 0 est favori"; // Test pour IsFav()
                     else echo "la recette 0 n'est pas favori";
                     ?>
+
+                    <form action="Favoris.php" method="post">
+                        <input type="text" name="idcocktail">
+                        <input type="submit" value="Add" name="mode">
+                        <input type="submit" value="Del" name="mode">
+                    </form>
 
                 <?php }else{ ?>
 
