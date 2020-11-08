@@ -13,24 +13,32 @@ ________________________________________________________________________________
 <?php
 session_start();
 include 'Donnees.inc.php';
+include 'Favoris.funct.php';
 
+// BLOCK TEMPORAIRE imite la connexion
 if (!empty($_POST['login'])){
     $_SESSION['login'] = $_POST['login'];
+    unset($_SESSION['favoris']);
+}
+
+if (isset($_POST['deco'])){
+    unset($_SESSION['login']);
 }
 
 if (isset($_POST['idcocktail'])){
-    include 'Favoris.funct.php';
-    include 'Favoris.inc.php';
-    if ($_POST['mode'] == 'Add') {
-        addFav(intval($_POST['idcocktail']), $Favoris);
-    }else {
-        delFav(intval($_POST['idcocktail']), $Favoris);
-    }
+    if ($_POST['mode'] == 'Add') addFav(intval($_POST['idcocktail']));
+    else delFav(intval($_POST['idcocktail']));
 }
 
 if (isset($_SESSION['login'])){
     include 'Favoris.inc.php';
-    include_once 'Favoris.funct.php';
+
+    if (isset($Favoris[$_SESSION["login"]])) $Fav = $Favoris[$_SESSION['login']];
+    else $Fav = array();
+
+}else{
+    if(isset($_SESSION['favoris'])) $Fav = $_SESSION['favoris'];
+    else $Fav = NULL;
 }
 ?>
 
@@ -45,7 +53,7 @@ if (isset($_SESSION['login'])){
 
     <body>
 
-        <header>
+        <header> <!-- ou nav -->
             <ul>
                 <li>Favoris</li> <!-- Lien vers les favoris -->
                 <li>Se connecter</li> <!-- Devine -->
@@ -58,44 +66,46 @@ if (isset($_SESSION['login'])){
 
         <div>
 
-            <?php if (isset($_SESSION['login'])){ ?> <!-- Si l'utilisateur est connecté -->
+            <?php if (empty($Fav)) {?>
+                <p>Utilisateur sans favoris</p>
+            <?php }else{ ?>
 
-                <?php if (array_key_exists($_SESSION['login'], $Favoris)){ ?>
-
-                    <?php
-                    foreach ($Favoris[$_SESSION['login']] as $idFav => $idRec){
-                        echo $idFav.' => '.$idRec.'<br/>';
-                    }
-                    ?>
-
-                    <?php
-                    if (IsFav(0, $Favoris)) echo "la recette 0 est favori"; // Test pour IsFav()
-                    else echo "la recette 0 n'est pas favori";
-                    ?>
-
-                    <form action="Favoris.php" method="post">
-                        <input type="text" name="idcocktail">
-                        <input type="submit" value="Add" name="mode">
-                        <input type="submit" value="Del" name="mode">
-                    </form>
-
-                <?php }else{ ?>
-
-                    <p>Utilisateur sans favoris</p>
-
-                <?php } ?>
-
-
-            <?php }else{ ?> <!-- Si l'utilisateur n'est pas connecté -->
-
-                <p>Donné votre login :</p>
-                <form action="Favoris.php" method="post">
-                    <input type="text" name="login">
-                    <input type="submit" value="Login Session">
-                </form>
+                <ul>
+                <?php
+                foreach ($Fav as $idFav => $idRec){
+                    echo "<li>".$idRec."-> <a href='".$_SERVER["PHP_SELF"]."/../recettes.php".'?Recette='.$idRec."'>".$Recettes[$idRec]["titre"]."</a></li>";
+                }
+                ?>
+                </ul>
+                <?php
+                if (IsFav(0)) echo "la recette 0 est favori"; // Test pour IsFav()
+                else echo "la recette 0 n'est pas favori";
+                ?>
 
             <?php } ?>
 
+            <form action="Favoris.php" method="post">
+                <input type="text" name="idcocktail">
+                <input type="submit" value="Add" name="mode">
+                <input type="submit" value="Del" name="mode">
+            </form>
+
+
+            <!-- BLOCK TEMPORAIRE formulaire de connection simplifier -->
+            <br><br><br><br>
+            <p>Donné votre login :</p>
+            <form action="Favoris.php" method="post">
+                <input type="text" name="login">
+                <input type="submit" value="Login Session">
+            </form>
+
+            <form action="Favoris.php" method="post">
+                <input type="submit" value="Deconnexion" name="deco">
+            </form>
+
+            <!-- BLOCK TEMPORAIRE affichage $_SESSION -->
+            <br><br>
+            <?php print_r($_SESSION); ?>
         </div>
     </body>
 </html>

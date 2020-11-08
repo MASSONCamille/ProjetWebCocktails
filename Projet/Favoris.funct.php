@@ -1,6 +1,5 @@
 <?php
 function RWFav($Favoris){
-    $ffav = fopen('Favoris.inc.php', 'w');
 
     $buffer = "<?php\n\$Favoris = array(\n";
     foreach ($Favoris as $x => $fav) {
@@ -12,46 +11,60 @@ function RWFav($Favoris){
     };
     $buffer .= ");\n?>";
 
-    fwrite($ffav, $buffer);
+    $filefav = fopen('Favoris.inc.php', 'w');
+    fwrite($filefav, $buffer);
+    fclose($filefav);
+};
 
-    fclose($ffav);
-}
 
 
-
-function IsFav($idCocktail, $Favoris = null){ // si l'utilisateur est connecter passer $Favoris en argument
-    if($_SESSION['login'] && $Favoris != null){ // Utilisateur connecter
-        foreach ($Favoris[$_SESSION['login']] as $idRec)
-        if ($idCocktail == $idRec) return true;
+function IsFav($idCocktail){
+    if(isset($_SESSION['login'])){ // Utilisateur connecter
+        include "Favoris.inc.php";
+        if (isset($Favoris)) return in_array($idCocktail, $Favoris[$_SESSION['login']]);
         return false;
 
     }else{ // Utilisateur non connecter
-
+        if(!isset($_SESSION['favoris'])) return false;
+        return in_array($idCocktail, $_SESSION['favoris']);
     }
 };
 
 
 
-function addFav($idCocktail, $Favoris = null){ // si l'utilisateur est connecter passer $Favoris en argument
-    if($_SESSION['login'] && $Favoris != null){ // Utilisateur connecter
-        $Favoris[$_SESSION['login']][] = $idCocktail;
-        RWFav($Favoris);
-    }else{ // Utilisateur non connecter
-
-    }
-};
-
-
-
-function delFav($idCocktail, $Favoris = null){ // si l'utilisateur est connecter passer $Favoris en argument
-    if($_SESSION['login'] && $Favoris != null){ // Utilisateur connecter
-        $key = array_search($idCocktail, $Favoris[$_SESSION['login']]);
-        if ($idCocktail == $Favoris[$_SESSION['login']][$key]) {
-            unset($Favoris[$_SESSION['login']][$key]);
+function addFav($idCocktail){
+    if(isset($_SESSION['login'])){ // Utilisateur connecter
+        include "Favoris.inc.php";
+        if (isset($Favoris)) {
+            if(in_array($idCocktail, $Favoris[$_SESSION['login']])) return false;
+            $Favoris[$_SESSION['login']][] = $idCocktail;
             RWFav($Favoris);
+            return true;
         }
     }else{ // Utilisateur non connecter
+        if(!isset($_SESSION['favoris'])) $_SESSION['favoris'] = array();
+        if(in_array($idCocktail, $_SESSION['favoris'])) return false;
+        $_SESSION['favoris'][] = $idCocktail;
+        return true;
+    }
+};
 
+
+
+function delFav($idCocktail){
+    if(isset($_SESSION['login'])){ // Utilisateur connecter
+        include "Favoris.inc.php";
+        if (isset($Favoris)) {
+            if(!in_array($idCocktail, $Favoris[$_SESSION['login']])) return false;
+            unset($Favoris[$_SESSION['login']][array_search($idCocktail, $Favoris[$_SESSION['login']])]);
+            RWFav($Favoris);
+            return true;
+        }
+    }else{ // Utilisateur non connecter
+        if(!isset($_SESSION['favoris'])) $_SESSION['favoris'] = array();
+        if(!in_array($idCocktail, $_SESSION['favoris'])) return false;
+        unset($_SESSION['favoris'][array_search($idCocktail, $_SESSION['favoris'])]);
+        return true;
     }
 };
 ?>

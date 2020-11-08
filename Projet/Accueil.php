@@ -113,7 +113,7 @@
             <ul>
                 <?php
                     foreach($RecettesRecherche as $CleRecette => $Recette) { ?>
-                        <li><a href='<?php echo $_SERVER["PHP_SELF"].'?Recette='.$CleRecette; ?>'><?php echo $Recette; ?></a></li>
+                        <li><a href='<?php echo $_SERVER["PHP_SELF"]."/../recettes.php".'?Recette='.$CleRecette; ?>'><?php echo $Recette; ?></a></li>
                 <?php }
                 ?>
             </ul>
