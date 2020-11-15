@@ -63,7 +63,7 @@ ________________________________________________________________________________
             <ul>
                 <li><a href="Favoris.php">Favoris</a></li>
                 <li>Se connecter</li> <!-- Devine -->
-                <li>S'inscrire</li>
+                <li><a href="Inscription.php">S'inscrire</a></li>
                 <!-- Si connecter afficher lien vers profil et déconnection -->
                 <li>Mon compte</li> <!-- Dans le si connecter -->
                 <li>Se déconnecter</li> <!-- Dans le si connecter -->

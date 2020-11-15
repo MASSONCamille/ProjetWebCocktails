@@ -1,40 +1,40 @@
 <?php
 
-    $submitted = false;
-    $loginBon = true;
-    $mdpBon = true;
-    $confMdpBon = true;
-    $sexeBon = true;
-    $nomBon = true;
-    $prenomBon = true;
-    $naissanceBon = true;
-    $mailBon = true;
+    $Submitted = false;
+    $LoginBon = true;
+    $MdpBon = true;
+    $ConfMdpBon = true;
+    $SexeBon = true;
+    $NomBon = true;
+    $PrenomBon = true;
+    $NaissanceBon = true;
+    $MailBon = true;
 
     if(isset($_POST['submit'])) {
-        $submitted = true;
+        $Submitted = true;
 
         if(isset($_POST["login"])) { //Vérifier si existe déjà
-            $login = $_POST["login"];
-            if(strlen(str_replace(' ', '', $login)) < 2)
-                $loginBon = false;
+            $Login = $_POST["login"];
+            if(strlen(str_replace(' ', '', $Login)) < 3)
+                $LoginBon = false;
         } else
-            $loginBon = false;
-
-        if(isset($_POST["confMdp"])) {
-            $confMdp = $_POST["confMdp"];
-            if(strlen(str_replace(' ', '', $confMdp)) < 2)
-                $confMdpBon = false;
-        } else
-            $confMdpBon = false;
+            $LoginBon = false;
 
         if(isset($_POST["mdp"])) {
-            $mdp = $_POST["mdp"];
-            if(strlen(str_replace(' ', '', $mdp)) < 2)
-                $mdpBon = false;
+            $Mdp = $_POST["mdp"];
+            if(strlen(str_replace(' ', '', $Mdp)) < 3)
+                $MdpBon = false;
         } else
-            $mdpBon = false;
+            $MdpBon = false;
 
-        if(isset($_POST["sexe"])) {
+        if(isset($_POST["confMdp"])) {
+            $ConfMdp = $_POST["confMdp"];
+            if($ConfMdp != $Mdp)
+                $ConfMdpBon = false;
+        } else
+            $ConfMdpBon = false;
+
+        /*if(isset($_POST["sexe"])) {
             $sexe = $_POST["sexe"];
             if($sexe != 'f' && $sexe != 'h')
                 $sexeBon = false;
@@ -46,7 +46,7 @@
             if(strlen(str_replace(' ', '', $nom)) < 2)
                 $nomBon = false;
         } else
-            $nomBon = false;
+            $nomBon = false;*/
     }
 
 ?>
@@ -67,16 +67,24 @@
             <ul>
                 <li><a href="Favoris.php">Favoris</a></li>
                 <li>Se connecter</li> <!-- Devine -->
-                <li>S'inscrire</li>
+                <li><a href="Inscription.php">S'inscrire</a></li>
                 <!-- Si connecter afficher lien vers profil et déconnection -->
                 <li>Mon compte</li> <!-- Dans le si connecter -->
                 <li>Se déconnecter</li> <!-- Dans le si connecter -->
             </ul>
         </header>
 
+        <?php
+            if($Submitted && $LoginBon && $MdpBon && $ConfMdpBon) { 
+                $_SESSION['Login'] = $Login ?>
+                <p>Vous êtes maintenant inscrit!</p>
+                <a href="Accueil.php">Retournez à l'accueil</a>
+        <?php } else {
+        ?>
+
         <h2>Inscription</h2>
 
-        <form method="post" action="">
+        <form method="post" action="#">
         <table>
             <tr>
                 <td>Login :</td>
@@ -131,6 +139,9 @@
             </tr>
         </table>
         <input type="submit" value="S'inscrire" name="submit" />
+
+        <?php }
+        ?>
 
     </body>
 
