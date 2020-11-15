@@ -59,7 +59,7 @@ ________________________________________________________________________________
 
         <h1><a href="Accueil.php">Les recettes de Mamille</a></h1>
 
-        <header> <!-- ou nav -->
+        <header>
             <ul>
                 <li><a href="Favoris.php">Favoris</a></li>
                 <li>Se connecter</li> <!-- Devine -->
