@@ -74,7 +74,7 @@
 
         <header>
             <ul>
-                <li>Favoris</li> <!-- Lien vers les favoris -->
+                <li><a href="Favoris.php">Favoris</a></li>
                 <li>Se connecter</li> <!-- Devine -->
                 <li>S'inscrire</li> <!-- Même page que la connection -->
                 <!-- Si connecter afficher lien vers profil et déconnection -->
@@ -112,7 +112,7 @@
             <ul>
                 <?php
                     foreach($RecettesRecherche as $CleRecette => $Recette) { ?>
-                        <li><a href='<?php echo $_SERVER["PHP_SELF"]."/../recettes.php".'?Recette='.$CleRecette; ?>'><?php echo $Recette; ?></a></li>
+                        <li><a href='<?php echo $_SERVER["PHP_SELF"]."/../Recettes.php".'?Recette='.$CleRecette; ?>'><?php echo $Recette; ?></a></li>
                 <?php }
                 ?>
             </ul>

@@ -11,35 +11,40 @@ ________________________________________________________________________________
 -->
 
 <?php
-session_start();
-include 'Donnees.inc.php';
-include 'Favoris.funct.php';
 
-// BLOCK TEMPORAIRE imite la connexion
-if (!empty($_POST['login'])){
-    $_SESSION['login'] = $_POST['login'];
-    unset($_SESSION['favoris']);
-}
+    include 'Donnees.inc.php';
+    include 'Favoris.funct.php';
 
-if (isset($_POST['deco'])){
-    unset($_SESSION['login']);
-}
+    session_start();
 
-if (isset($_POST['idcocktail'])){
-    if ($_POST['mode'] == 'Add') addFav(intval($_POST['idcocktail']));
-    else delFav(intval($_POST['idcocktail']));
-}
+    // BLOCK TEMPORAIRE imite la connexion
+    if (!empty($_POST['login'])){
+        $_SESSION['login'] = $_POST['login'];
+        unset($_SESSION['favoris']);
+    }
 
-if (isset($_SESSION['login'])){
-    include 'Favoris.inc.php';
+    if (isset($_POST['deco'])){
+        unset($_SESSION['login']);
+    }
 
-    if (isset($Favoris[$_SESSION["login"]])) $Fav = $Favoris[$_SESSION['login']];
-    else $Fav = array();
+    if (isset($_POST['idcocktail'])){
+        if ($_POST['mode'] == 'Add') addFav(intval($_POST['idcocktail']));
+        else delFav(intval($_POST['idcocktail']));
+    }
 
-}else{
-    if(isset($_SESSION['favoris'])) $Fav = $_SESSION['favoris'];
-    else $Fav = NULL;
-}
+    if (isset($_SESSION['login'])){
+        include 'Favoris.inc.php';
+
+        if (isset($Favoris[$_SESSION["login"]])) $Fav = $Favoris[$_SESSION['login']];
+        else $Fav = array();
+
+    }else{
+        if(isset($_SESSION['favoris'])) $Fav = $_SESSION['favoris'];
+        else $Fav = NULL;
+    }
+
+    $_SESSION['CheminAcces'] = "Favoris";
+
 ?>
 
 <!DOCTYPE html>
@@ -48,14 +53,15 @@ if (isset($_SESSION['login'])){
     <head>
         <title>Cocktails Favoris</title>
         <meta charset="utf-8" />
-
     </head>
 
     <body>
 
+        <h1><a href="Accueil.php">Les recettes de Mamille</a></h1>
+
         <header> <!-- ou nav -->
             <ul>
-                <li>Favoris</li> <!-- Lien vers les favoris -->
+                <li><a href="Favoris.php">Favoris</a></li>
                 <li>Se connecter</li> <!-- Devine -->
                 <li>S'inscrire</li> <!-- Même page que la connection -->
                 <!-- Si connecter afficher lien vers profil et déconnection -->
@@ -65,16 +71,15 @@ if (isset($_SESSION['login'])){
         </header>
 
         <div>
-
             <?php if (empty($Fav)) {?>
-                <p>Utilisateur sans favoris</p>
+                <p>Pas de favoris</p>
             <?php }else{ ?>
 
                 <ul>
                 <?php
-                foreach ($Fav as $idFav => $idRec){
-                    echo "<li>".$idRec."-> <a href='".$_SERVER["PHP_SELF"]."/../recettes.php".'?Recette='.$idRec."'>".$Recettes[$idRec]["titre"]."</a></li>";
-                }
+                    foreach ($Fav as $idFav => $idRec) {
+                        echo "<li>".$idRec."-> <a href='Recettes.php".'?Recette='.$idRec."'>".$Recettes[$idRec]["titre"]."</a></li>";
+                    }
                 ?>
                 </ul>
                 <?php
@@ -108,4 +113,5 @@ if (isset($_SESSION['login'])){
             <?php print_r($_SESSION); ?>
         </div>
     </body>
+
 </html>

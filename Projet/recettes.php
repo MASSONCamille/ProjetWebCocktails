@@ -10,6 +10,9 @@
     }
 
     $CheminAcces = $_SESSION['CheminAcces'];
+    $VientDeFavoris = false;
+    if(is_string($CheminAcces))
+        $VientDeFavoris = true;
 ?>
 
 <!DOCTYPE html>
@@ -26,7 +29,7 @@
 
         <header>
             <ul>
-                <li>Favoris</li> <!-- Lien vers les favoris -->
+                <li><a href="Favoris.php">Favoris</a></li>
                 <li>Se connecter</li> <!-- Devine -->
                 <li>S'inscrire</li> <!-- Même page que la connection -->
                 <!-- Si connecter afficher lien vers profil et déconnection -->
@@ -39,9 +42,13 @@
             <h2>Navigation</h2>
             <p>
                 <?php //Attention mettre une condition si on vient des favoris
+                    if($VientDeFavoris) { ?>
+                        <a href="Favoris.php">Retour aux favoris</a>
+                    <?php } else {
                     foreach($CheminAcces as $Element) { ?>
-                        <a href='<?php echo $_SERVER["PHP_SELF"].'?Position='.$Element; ?>'><?php echo $Element; ?>/</a>
+                        <a href='<?php echo 'Accueil.php?Position='.$Element; ?>'><?php echo $Element; ?>/</a>
                 <?php }
+                    }
                 ?>
             </p>
         </nav>
