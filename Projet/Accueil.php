@@ -88,7 +88,7 @@
             <p>
                 <?php
                     foreach($CheminAcces as $Element) { ?>
-                        <a href='<?php echo $_SERVER["PHP_SELF"].'?Position='.$Element; ?>'><?php echo $Element; ?>/</a>
+                        <a href="<?php echo $_SERVER['PHP_SELF']."?Position=".$Element; ?>"><?php echo $Element; ?>/</a>
                 <?php }
                 ?>
             </p>
@@ -97,8 +97,8 @@
                     foreach($Hierarchie as $NomCateg => $TabSousCateg) {
                         foreach($TabSousCateg as $NomSousCateg => $SousCateg) {
                             if($NomSousCateg == 'super-categorie') {
-                                if(in_array($Position, $SousCateg)) {?>
-                                    <li><a href='<?php echo $_SERVER["PHP_SELF"].'?Position='.$NomCateg; ?>'><?php echo $NomCateg; ?></a></li>
+                                if(in_array($Position, $SousCateg)) { ?>
+                                    <li><a href="<?php echo $_SERVER['PHP_SELF']."?Position=".$NomCateg; ?>"><?php echo $NomCateg; ?></a></li>
                                 <?php }
                             }
                         }
@@ -112,7 +112,7 @@
             <ul>
                 <?php
                     foreach($RecettesRecherche as $CleRecette => $Recette) { ?>
-                        <li><a href='<?php echo $_SERVER["PHP_SELF"]."/../Recettes.php".'?Recette='.$CleRecette; ?>'><?php echo $Recette; ?></a></li>
+                        <li><a href="<?php echo "Recettes.php"."?Recette=".$CleRecette; ?>"><?php echo $Recette; ?></a></li>
                 <?php }
                 ?>
             </ul>
