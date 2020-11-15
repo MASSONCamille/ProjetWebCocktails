@@ -19,12 +19,12 @@ ________________________________________________________________________________
 
     // BLOCK TEMPORAIRE imite la connexion
     if (!empty($_POST['login'])){
-        $_SESSION['login'] = $_POST['login'];
+        $_SESSION['Login'] = $_POST['login'];
         unset($_SESSION['favoris']);
     }
 
     if (isset($_POST['deco'])){
-        unset($_SESSION['login']);
+        unset($_SESSION['Login']);
     }
 
     if (isset($_POST['idcocktail'])){
@@ -32,10 +32,10 @@ ________________________________________________________________________________
         else delFav(intval($_POST['idcocktail']));
     }
 
-    if (isset($_SESSION['login'])){
+    if (isset($_SESSION['Login'])){
         include 'Favoris.inc.php';
 
-        if (isset($Favoris[$_SESSION["login"]])) $Fav = $Favoris[$_SESSION['login']];
+        if (isset($Favoris[$_SESSION["Login"]])) $Fav = $Favoris[$_SESSION['Login']];
         else $Fav = array();
 
     }else{
