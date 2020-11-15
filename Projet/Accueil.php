@@ -34,7 +34,6 @@
     $RecettesRecherche = RechercheRecettes($IngredientsRecherche, $Recettes);
 
     //FONCTIONS
-
     function RechercheIngredients($PositionRecherche, $IngredientsRecherche, $Hierarchie) { //FONCTION DE RECHERCHE DES INGREDIENTS
         foreach($Hierarchie[$PositionRecherche] as $NomSousCateg => $SousCateg) {
             if($NomSousCateg == 'sous-categorie') {
@@ -71,9 +70,9 @@
 
     <body> <!-- a voir la gestion des erreurs -->
 
-        <h1>Les recettes de Mamille</h1> <!-- Lien vers l'accueil -->
+        <h1><a href="Accueil.php">Les recettes de Mamille</a></h1>
 
-        <header> <!-- ou nav -->
+        <header>
             <ul>
                 <li>Favoris</li> <!-- Lien vers les favoris -->
                 <li>Se connecter</li> <!-- Devine -->
