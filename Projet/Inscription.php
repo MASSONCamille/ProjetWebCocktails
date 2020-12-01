@@ -187,7 +187,6 @@
             $NomBon && $PrenomBon && $SexeBon && $NaissanceBon && 
             $AdElecBon && $AdPostaleBon && $CodePostaleBon && $VilleBon && $NumeroBon) { 
                 $_SESSION['Login'] = $Login;
-                $_SESSION['Mdp'] = $Mdp;
                 $NouvUtilisateur = array (
                     "Login" => $Login,
                     "Mdp" => $Mdp,
