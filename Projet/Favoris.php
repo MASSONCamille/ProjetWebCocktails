@@ -17,6 +17,9 @@ ________________________________________________________________________________
 
     session_start();
 
+    if(isset($_GET['Deconnexion']) && $_GET['Deconnexion'] == true)
+        unset($_SESSION['Login']);
+
     // BLOCK TEMPORAIRE imite la connexion
     if (!empty($_POST['login'])){
         $_SESSION['Login'] = $_POST['login'];
@@ -62,11 +65,14 @@ ________________________________________________________________________________
         <header>
             <ul>
                 <li><a href="Favoris.php">Favoris</a></li>
-                <li><a href="Connexion.php">Se connecter</a></li>
-                <li><a href="Inscription.php">S'inscrire</a></li>
-                <!-- Si connecter afficher lien vers profil et déconnection -->
-                <li>Mon compte</li> <!-- Dans le si connecter -->
-                <li>Se déconnecter</li> <!-- Dans le si connecter -->
+                <?php if(!isset($_SESSION['Login']) || $_SESSION['Login'] === "") { ?>
+                    <li><a href="Connexion.php">Se connecter</a></li>
+                    <li><a href="Inscription.php">S'inscrire</a></li>
+                <?php }
+                if(isset($_SESSION['Login']) && $_SESSION['Login'] !== "") { ?>
+                    <li>Mon compte</li> <!-- Dans le si connecter -->
+                    <li><a href="<?php echo $_SERVER['PHP_SELF']."?Deconnexion=true"; ?>">Se déconnecter</a></li>
+                <?php } ?>
             </ul>
         </header>
 

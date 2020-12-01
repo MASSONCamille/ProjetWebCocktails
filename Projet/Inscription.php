@@ -3,6 +3,9 @@
 
     session_start();
 
+    if(isset($_GET['Deconnexion']) && $_GET['Deconnexion'] == true)
+        unset($_SESSION['Login']);
+
     $Submitted = false;
     $LoginBon = true;
     $MdpBon = true;
@@ -16,6 +19,7 @@
     $CodePostaleBon = true;
     $VilleBon = true;
     $NumeroBon = true;
+    $InscritBon = false;
 
     /*$LoginErreur = "";
     $MdpErreur = "";
@@ -157,6 +161,51 @@
         }
     }
 
+    if($Submitted && $LoginBon && $MdpBon && $ConfMdpBon && 
+    $NomBon && $PrenomBon && $SexeBon && $NaissanceBon && 
+    $AdElecBon && $AdPostaleBon && $CodePostaleBon && $VilleBon && $NumeroBon) { 
+        $_SESSION['Login'] = $Login;
+        $NouvUtilisateur = array (
+            "Login" => $Login,
+            "Mdp" => $Mdp,
+        );
+        if($Nom != "")
+            $NouvUtilisateur['Nom'] = $Nom;
+        if($Prenom != "")
+            $NouvUtilisateur['Prenom'] = $Prenom;
+        if(isset($Sexe) && $Sexe != "")
+            $NouvUtilisateur['Sexe'] = $Sexe;
+        if($Naissance != "")
+            $NouvUtilisateur['Nom'] = $Naissance;
+        if($AdElec != "")
+            $NouvUtilisateur['AdElec'] = $AdElec;
+        if($AdPostale != "") {
+            $AdPostale = preg_replace('!\s+!', ' ', $AdPostale);
+            $NouvUtilisateur['AdPostale'] = $AdPostale;
+        }
+        if($CodePostale != "")
+            $NouvUtilisateur['CodePostale'] = $CodePostale;
+        if($Ville != "")
+            $NouvUtilisateur['Ville'] = $Ville;
+        if($Numero != "")
+            $NouvUtilisateur['Numero'] = $Numero;
+        array_push($Utilisateurs, $NouvUtilisateur);
+        $buffer = "<?php\n\$Utilisateurs = array(\n";
+        foreach ($Utilisateurs as $x => $User) {
+            $buffer .= "\t'".$x."' => array(\n";
+            foreach ($User as $NomParam => $Param) {
+                $buffer .= "\t\t'".$NomParam."' => '".$Param."',\n";
+            }
+            $buffer .= "\t),\n";
+        };
+        $buffer .= ");\n?>";
+        
+        $fileUser = fopen('Utilisateurs.inc.php', 'w');
+        fwrite($fileUser, $buffer);
+        fclose($fileUser);
+        $InscritBon = true;
+    }
+
 ?>
 
 <!DOCTYPE html>
@@ -174,58 +223,18 @@
         <header>
             <ul>
                 <li><a href="Favoris.php">Favoris</a></li>
-                <li><a href="Connexion.php">Se connecter</a></li>
-                <li><a href="Inscription.php">S'inscrire</a></li>
-                <!-- Si connecter afficher lien vers profil et déconnection -->
-                <li>Mon compte</li> <!-- Dans le si connecter -->
-                <li>Se déconnecter</li> <!-- Dans le si connecter -->
+                <?php if(!isset($_SESSION['Login']) || $_SESSION['Login'] === "") { ?>
+                    <li><a href="Connexion.php">Se connecter</a></li>
+                    <li><a href="Inscription.php">S'inscrire</a></li>
+                <?php }
+                if(isset($_SESSION['Login']) && $_SESSION['Login'] !== "") { ?>
+                    <li>Mon compte</li> <!-- Dans le si connecter -->
+                    <li><a href="<?php echo $_SERVER['PHP_SELF']."?Deconnexion=true"; ?>">Se déconnecter</a></li>
+                <?php } ?>
             </ul>
         </header>
 
-        <?php
-            if($Submitted && $LoginBon && $MdpBon && $ConfMdpBon && 
-            $NomBon && $PrenomBon && $SexeBon && $NaissanceBon && 
-            $AdElecBon && $AdPostaleBon && $CodePostaleBon && $VilleBon && $NumeroBon) { 
-                $_SESSION['Login'] = $Login;
-                $NouvUtilisateur = array (
-                    "Login" => $Login,
-                    "Mdp" => $Mdp,
-                );
-                if($Nom != "")
-                    $NouvUtilisateur['Nom'] = $Nom;
-                if($Prenom != "")
-                    $NouvUtilisateur['Prenom'] = $Prenom;
-                if(isset($Sexe) && $Sexe != "")
-                    $NouvUtilisateur['Sexe'] = $Sexe;
-                if($Naissance != "")
-                    $NouvUtilisateur['Nom'] = $Naissance;
-                if($AdElec != "")
-                    $NouvUtilisateur['AdElec'] = $AdElec;
-                if($AdPostale != "") {
-                    $AdPostale = preg_replace('!\s+!', ' ', $AdPostale);
-                    $NouvUtilisateur['AdPostale'] = $AdPostale;
-                }
-                if($CodePostale != "")
-                    $NouvUtilisateur['CodePostale'] = $CodePostale;
-                if($Ville != "")
-                    $NouvUtilisateur['Ville'] = $Ville;
-                if($Numero != "")
-                    $NouvUtilisateur['Numero'] = $Numero;
-                array_push($Utilisateurs, $NouvUtilisateur);
-                $buffer = "<?php\n\$Utilisateurs = array(\n";
-                foreach ($Utilisateurs as $x => $User) {
-                    $buffer .= "\t'".$x."' => array(\n";
-                    foreach ($User as $NomParam => $Param) {
-                        $buffer .= "\t\t'".$NomParam."' => '".$Param."',\n";
-                    }
-                    $buffer .= "\t),\n";
-                };
-                $buffer .= ");\n?>";
-                
-                $fileUser = fopen('Utilisateurs.inc.php', 'w');
-                fwrite($fileUser, $buffer);
-                fclose($fileUser);
-                ?>
+        <?php if($InscritBon) { ?>
                 <p>Vous êtes maintenant inscrit!</p>
                 <a href="Accueil.php">Retour à l'accueil</a>
         <?php } else {
