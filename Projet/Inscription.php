@@ -210,35 +210,40 @@
         <table>
             <tr>
                 <td>Login* :</td>
-                <td><input id="Login" type="text" name="login" required="required" /></td>
+                <td><input id="Login" type="text" name="login" required="required"
+                           value="<?php if (isset($_POST['submit']) && empty($error["Login"])) echo $_POST['login']; ?>"/></td>
                 <?php if(!empty($error["Login"])) { ?>
                     <td><span><?php echo $error["Login"]; ?></span></td>
                 <?php } ?>
             </tr>
             <tr>
                 <td>Mot de passe* :</td>
-                <td><input id="Mdp" type="password" name="mdp" required="required" /></td>
+                <td><input id="Mdp" type="password" name="mdp" required="required"
+                           value="<?php if (isset($_POST['submit']) && empty($error["Mdp"])) echo $_POST['mdp']; ?>" /></td>
                 <?php if(!empty($error["Mdp"])) { ?>
                     <td><span><?php echo $error["Mdp"]; ?></span></td>
                 <?php } ?>
             </tr>
             <tr>
                 <td>Confirmation du mot de passe* :</td>
-                <td><input id="MdpConf" type="password" name="confMdp" required="required" /></td>
+                <td><input id="MdpConf" type="password" name="confMdp" required="required"
+                           value="<?php if (isset($_POST['submit']) && empty($error["MdpConf"])) echo $_POST['confMdp']; ?>" /></td>
                 <?php if(!empty($error["MdpConf"])) { ?>
                     <td><span><?php echo $error["MdpConf"]; ?></span></td>
                 <?php } ?>
             </tr>
             <tr>
                 <td>Nom :</td>
-                <td><input type="text" name="nom" /></td>
+                <td><input type="text" name="nom"
+                           value="<?php if (isset($_POST['submit']) && empty($error["Nom"])) echo $_POST['nom']; ?>" /></td>
                 <?php if(!empty($error["Nom"])) { ?>
                     <td><span><?php echo $error["Nom"]; ?></span></td>
                 <?php } ?>
             </tr>
             <tr>
                 <td>Prénom :</td>
-                <td><input type="text" name="prenom" /></td>
+                <td><input type="text" name="prenom"
+                           value="<?php if (isset($_POST['submit']) && empty($error["Prenom"])) echo $_POST['prenom']; ?>" /></td>
                 <?php if(!empty($error["Prenom"])) { ?>
                     <td><span><?php echo $error["Prenom"]; ?></span></td>
                 <?php } ?>
@@ -246,8 +251,8 @@
             <tr>
                 <td>Sexe :</td>
                 <td>
-                    <input type="radio" name="sexe" value="f"/> Femme
-                    <input type="radio" name="sexe" value="h"/> Homme
+                    <input type="radio" name="sexe" value="f" <?php if (isset($_POST['submit']) && $_POST['sexe'] == 'f') echo "checked"; ?>/> Femme
+                    <input type="radio" name="sexe" value="h" <?php if (isset($_POST['submit']) && $_POST['sexe'] == 'h') echo "checked"; ?>/> Homme
                 </td>
                 <?php if(!empty($error["Sexe"])) { ?>
                     <td><span><?php echo $error["Sexe"]; ?></span></td>
@@ -255,42 +260,48 @@
             </tr>
             <tr>
                 <td>Date de naissance :</td>
-                <td><input type="date" name="naissance" /></td>
+                <td><input type="date" name="naissance"
+                           value="<?php if (isset($_POST['submit']) && empty($error["DateNai"])) echo $_POST['naissance']; ?>" /></td>
                 <?php if(!empty($error["DateNai"])) { ?>
                     <td><span><?php echo $error["DateNai"]; ?></span></td>
                 <?php } ?>
             </tr>
             <tr>
                 <td>Adresse électronique :</td>
-                <td><input type="email" name="adElec" /></td>
+                <td><input type="email" name="adElec"
+                           value="<?php if (isset($_POST['submit']) && empty($error["AdElec"])) echo $_POST['adElec']; ?>" /></td>
                 <?php if(!empty($error["AdElec"])) { ?>
                     <td><span><?php echo $error["AdElec"]; ?></span></td>
                 <?php } ?>
             </tr>
             <tr>
                 <td>Adresse postale :</td>
-                <td><input type="text" name="adPostale" /></td>
+                <td><input type="text" name="adPostale"
+                           value="<?php if (isset($_POST['submit']) && empty($error["AdPost"])) echo $_POST['adPostale']; ?>" /></td>
                 <?php if(!empty($error["AdPost"])) { ?>
                     <td><span><?php echo $error["AdPost"]; ?></span></td>
                 <?php } ?>
             </tr>
             <tr>
                 <td>Code postal :</td>
-                <td><input type="text" name="codePostale" /></td>
+                <td><input type="text" name="codePostale"
+                           value="<?php if (isset($_POST['submit']) && empty($error["CodePost"])) echo $_POST['codePostale']; ?>" /></td>
                 <?php if(!empty($error["CodePost"])) { ?>
                     <td><span><?php echo $error["CodePost"]; ?></span></td>
                 <?php } ?>
             </tr>
             <tr>
                 <td>Ville :</td>
-                <td><input type="text" name="ville" /></td>
+                <td><input type="text" name="ville"
+                           value="<?php if (isset($_POST['submit']) && empty($error["Ville"])) echo $_POST['ville']; ?>" /></td>
                 <?php if(!empty($error["Ville"])) { ?>
                     <td><span><?php echo $error["Ville"]; ?></span></td>
                 <?php } ?>
             </tr>
             <tr>
                 <td>Numéro de téléphone :</td>
-                <td><input type="tel" name="numero" /></td>
+                <td><input type="tel" name="numero"
+                           value="<?php if (isset($_POST['submit']) && empty($error["Numero"])) echo $_POST['numero']; ?>" /></td>
                 <?php if(!empty($error["Numero"])) { ?>
                     <td><span><?php echo $error["Numero"]; ?></span></td>
                 <?php } ?>
