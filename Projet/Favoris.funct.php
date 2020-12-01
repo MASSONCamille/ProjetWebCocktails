@@ -19,9 +19,9 @@ function RWFav($Favoris){
 
 
 function IsFav($idCocktail){
-    if(isset($_SESSION['login'])){ // Utilisateur connecter
+    if(isset($_SESSION['Login'])){ // Utilisateur connecter
         include "Favoris.inc.php";
-        if (isset($Favoris)) return in_array($idCocktail, $Favoris[$_SESSION['login']]);
+        if (isset($Favoris)) return in_array($idCocktail, $Favoris[$_SESSION['Login']]);
         return false;
 
     }else{ // Utilisateur non connecter
@@ -33,11 +33,11 @@ function IsFav($idCocktail){
 
 
 function addFav($idCocktail){
-    if(isset($_SESSION['login'])){ // Utilisateur connecter
+    if(isset($_SESSION['Login'])){ // Utilisateur connecter
         include "Favoris.inc.php";
         if (isset($Favoris)) {
-            if(in_array($idCocktail, $Favoris[$_SESSION['login']])) return false;
-            $Favoris[$_SESSION['login']][] = $idCocktail;
+            if(in_array($idCocktail, $Favoris[$_SESSION['Login']])) return false;
+            $Favoris[$_SESSION['Login']][] = $idCocktail;
             RWFav($Favoris);
             return true;
         }
@@ -52,11 +52,11 @@ function addFav($idCocktail){
 
 
 function delFav($idCocktail){
-    if(isset($_SESSION['login'])){ // Utilisateur connecter
+    if(isset($_SESSION['Login'])){ // Utilisateur connecter
         include "Favoris.inc.php";
         if (isset($Favoris)) {
-            if(!in_array($idCocktail, $Favoris[$_SESSION['login']])) return false;
-            unset($Favoris[$_SESSION['login']][array_search($idCocktail, $Favoris[$_SESSION['login']])]);
+            if(!in_array($idCocktail, $Favoris[$_SESSION['Login']])) return false;
+            unset($Favoris[$_SESSION['Login']][array_search($idCocktail, $Favoris[$_SESSION['Login']])]);
             RWFav($Favoris);
             return true;
         }

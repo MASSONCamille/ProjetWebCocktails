@@ -6,33 +6,14 @@
     if(isset($_GET['Deconnexion']) && $_GET['Deconnexion'] == true)
         unset($_SESSION['Login']);
 
+
+
+    $error = array();
+
     $Submitted = false;
-    $LoginBon = true;
-    $MdpBon = true;
-    $ConfMdpBon = true;
-    $NomBon = true;
-    $PrenomBon = true;
-    $SexeBon = true;
-    $NaissanceBon = true;
-    $AdElecBon = true;
-    $AdPostaleBon = true;
-    $CodePostaleBon = true;
-    $VilleBon = true;
-    $NumeroBon = true;
+
     $InscritBon = false;
 
-    /*$LoginErreur = "";
-    $MdpErreur = "";
-    $ConfMdpErreur = "";
-    $LoginErreur = "";
-    $LoginErreur = "";
-    $LoginErreur = "";
-    $LoginErreur = "";
-    $LoginErreur = "";
-    $LoginErreur = "";
-    $LoginErreur = "";
-    $LoginErreur = "";
-    $LoginErreur = "";*/
 
     if(isset($_POST['submit'])) {
         $Submitted = true;
@@ -40,65 +21,55 @@
         if(isset($_POST["login"])) {
             $Login = trim($_POST["login"]);
             if(strlen(str_replace(' ', '', $Login)) < 3) {
-                $LoginBon = false;
-                $LoginErreur = "Le nom d'utilisateur doit au moins contenir 3 lettres.";
+                $error["Login"] = "Le nom d'utilisateur doit au moins contenir 3 lettres.";
             }
             else {
                 foreach($Utilisateurs as $User) {
                     if($User['Login'] == $Login) {
-                        $LoginBon = false;
-                        $LoginErreur = "Nom d'utilisateur déjà utilisé.";
+                        $error["Login"] = "Nom d'utilisateur déjà utilisé.";
                     }
                 }
             }
         } else {
-            $LoginBon = false;
-            $LoginErreur = "Nom d'utilisateur nécessaire.";
+            $error["Login"] = "Nom d'utilisateur nécessaire.";
         }
 
         if(isset($_POST["mdp"])) {
             $Mdp = $_POST["mdp"];
             if(strlen(str_replace(' ', '', $Mdp)) < 3) {
-                $MdpBon = false;
-                $MdpErreur = "Le mot de passe doit au moins contenir 3 lettres.";
+                $error["Mdp"] = "Le mot de passe doit au moins contenir 3 lettres.";
             }
         } else {
-            $MdpBon = false;
-            $MdpErreur = "Mot de passe nécessaire.";
+            $error["Mdp"] = "Mot de passe nécessaire.";
         }
 
         if(isset($_POST["confMdp"])) {
             $ConfMdp = $_POST["confMdp"];
             if($ConfMdp !== $Mdp) {
-                $ConfMdpBon = false;
-                $ConfMdpErreur = "Les mots de passes doivent correspondre.";
+                $error["MdpConf"] = "Les mots de passes doivent correspondre.";
             }
         } else {
-            $ConfMdpBon = false;
-            $ConfMdpErreur = "Confirmation du mot de passe nécessaire.";
+            $error["MdpConf"] = "Confirmation du mot de passe nécessaire.";
         }
 
         if(isset($_POST["nom"])) {
             $Nom = trim($_POST["nom"]);
             if((strlen(str_replace(' ', '', $Nom)) < 2 || !preg_match("/^[a-zA-Z-' ]{2,}$/",$Nom)) && $Nom != "") {
-                $NomBon = false;
-                $NomErreur = "Nom incorrect.";
+                $error["Nom"] = "Nom incorrect.";
             }
         }
 
         if(isset($_POST["prenom"])) {
             $Prenom = trim($_POST["prenom"]);
             if((strlen(str_replace(' ', '', $Prenom)) < 2 || !preg_match("/^[a-zA-Z-' ]{2,}$/",$Prenom)) && $Prenom != "") {
-                $PrenomBon = false;
-                $PrenomErreur = "Prenom incorrect.";
+                $error["Prenom"] = "Prenom incorrect.";
             }
         }
 
         if(isset($_POST["sexe"])) {
             $Sexe = trim($_POST["sexe"]);
             if(($Sexe != 'f' && $Sexe != 'h') && $Sexe != "") {
-                $SexeBon = false;
-                $SexeErreur = "Problème dans le choix du sexe.";
+                $error["Sexe"] = "Problème dans le choix du sexe.";
             }
         }
 
@@ -107,15 +78,12 @@
             if($Naissance != "") {
                 if(preg_match("/^[0-9-]+$/",$Naissance)) {
                     if(!checkdate(substr($Naissance, 5, 2), substr($Naissance, -2, 2), substr($Naissance, 0, 4))) {
-                        $NaissanceBon = false;
-                        $NaissanceErreur = "Date incorrecte.";
+                        $error["DateNai"] = "Date incorrecte.";
                     } else if($Naissance >= date("Y-m-d")) {
-                        $NaissanceBon = false;
-                        $NaissanceErreur = "Date de naissance impossible.";
+                        $error["DateNai"] = "Date de naissance impossible.";
                     }
                 } else {
-                    $NaissanceBon = false;
-                    $NaissanceErreur = "Date incorrecte.";
+                    $error["DateNai"] = "Date incorrecte.";
                 }
             }
         }
@@ -123,47 +91,40 @@
         if(isset($_POST["adElec"])) {
             $AdElec = trim($_POST["adElec"]);
             if(!preg_match("/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/",$AdElec) && $AdElec != "") {
-                $AdElecBon = false;
-                $AdElecErreur = "Adresse électronique incorrecte.";
+                $error["AdElec"] = "Adresse électronique incorrecte.";
             }
         }
 
         if(isset($_POST["adPostale"])) {
             $AdPostale = trim($_POST["adPostale"]);
             if(!preg_match("/^[0-9]{1,3}[a-zA-Z]{0,2}[ ]{1,}[a-zA-Z-']{2,}[ ]{1,}[a-zA-Z-' ]{2,}$/",$AdPostale) && $AdPostale != "") {
-                $AdPostaleBon = false;
-                $AdPostaleErreur = "Adresse postale incorrecte.";
+                $error["AdPost"] = "Adresse postale incorrecte.";
             }
         }
 
         if(isset($_POST["codePostale"])) {
             $CodePostale = trim($_POST["codePostale"]);
             if(!preg_match("/^[0-9]{0,5}$/",$CodePostale) && $CodePostale != "") {
-                $CodePostaleBon = false;
-                $CodePostaleErreur = "Code postale incorrect.";
+                $error["CodePost"] = "Code postale incorrect.";
             }
         }
 
         if(isset($_POST["ville"])) {
             $Ville = trim($_POST["ville"]);
             if((strlen(str_replace(' ', '', $Ville)) < 2 || !preg_match("/^[a-zA-Z-' ]{2,}$/",$Ville)) && $Ville != "") {
-                $VilleBon = false;
-                $VilleErreur = "Nom de la ville incorrect.";
+                $error["Ville"] = "Nom de la ville incorrect.";
             }
         }
 
         if(isset($_POST["numero"])) {
             $Numero = trim($_POST["numero"]);
             if(!preg_match("/^0[1-9][0-9]{8}|[+][1-9]{3,4}[0-9]{8}|00[1-9]{3,4}[0-9]{8}$/",$Numero) && $Numero != "") {
-                $NumeroBon = false;
-                $NumeroErreur = "Numéro de téléphone incorrect.";
+                $error["Numero"] = "Numéro de téléphone incorrect.";
             }
         }
     }
 
-    if($Submitted && $LoginBon && $MdpBon && $ConfMdpBon && 
-    $NomBon && $PrenomBon && $SexeBon && $NaissanceBon && 
-    $AdElecBon && $AdPostaleBon && $CodePostaleBon && $VilleBon && $NumeroBon) { 
+    if($Submitted && empty($error)) {
         $_SESSION['Login'] = $Login;
         $NouvUtilisateur = array (
             "Login" => $Login,
@@ -214,6 +175,8 @@
     <head>
         <title>Inscription</title>
         <meta charset="utf-8" />
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="script/verif_form.js"></script>
     </head>
 
     <body> <!-- a voir la gestion des erreurs -->
@@ -247,37 +210,37 @@
         <table>
             <tr>
                 <td>Login* :</td>
-                <td><input type="text" name="login" required="required" /></td>
-                <?php if(!$LoginBon) { ?>
-                    <td><span><?php echo $LoginErreur; ?></span></td>
+                <td><input id="Login" type="text" name="login" required="required" /></td>
+                <?php if(!empty($error["Login"])) { ?>
+                    <td><span><?php echo $error["Login"]; ?></span></td>
                 <?php } ?>
             </tr>
             <tr>
                 <td>Mot de passe* :</td>
-                <td><input type="password" name="mdp" required="required" /></td>
-                <?php if(!$MdpBon) { ?>
-                    <td><span><?php echo $MdpErreur; ?></span></td>
+                <td><input id="Mdp" type="password" name="mdp" required="required" /></td>
+                <?php if(!empty($error["Mdp"])) { ?>
+                    <td><span><?php echo $error["Mdp"]; ?></span></td>
                 <?php } ?>
             </tr>
             <tr>
                 <td>Confirmation du mot de passe* :</td>
-                <td><input type="password" name="confMdp" required="required" /></td>
-                <?php if(!$ConfMdpBon) { ?>
-                    <td><span><?php echo $ConfMdpErreur; ?></span></td>
+                <td><input id="MdpConf" type="password" name="confMdp" required="required" /></td>
+                <?php if(!empty($error["MdpConf"])) { ?>
+                    <td><span><?php echo $error["MdpConf"]; ?></span></td>
                 <?php } ?>
             </tr>
             <tr>
                 <td>Nom :</td>
                 <td><input type="text" name="nom" /></td>
-                <?php if(!$NomBon) { ?>
-                    <td><span><?php echo $NomErreur; ?></span></td>
+                <?php if(!empty($error["Nom"])) { ?>
+                    <td><span><?php echo $error["Nom"]; ?></span></td>
                 <?php } ?>
             </tr>
             <tr>
                 <td>Prénom :</td>
                 <td><input type="text" name="prenom" /></td>
-                <?php if(!$PrenomBon) { ?>
-                    <td><span><?php echo $PrenomErreur; ?></span></td>
+                <?php if(!empty($error["Prenom"])) { ?>
+                    <td><span><?php echo $error["Prenom"]; ?></span></td>
                 <?php } ?>
             </tr>
             <tr>
@@ -286,55 +249,55 @@
                     <input type="radio" name="sexe" value="f"/> Femme
                     <input type="radio" name="sexe" value="h"/> Homme
                 </td>
-                <?php if(!$SexeBon) { ?>
-                    <td><span><?php echo $SexeErreur; ?></span></td>
+                <?php if(!empty($error["Sexe"])) { ?>
+                    <td><span><?php echo $error["Sexe"]; ?></span></td>
                 <?php } ?>
             </tr>
             <tr>
                 <td>Date de naissance :</td>
                 <td><input type="date" name="naissance" /></td>
-                <?php if(!$NaissanceBon) { ?>
-                    <td><span><?php echo $NaissanceErreur; ?></span></td>
+                <?php if(!empty($error["DateNai"])) { ?>
+                    <td><span><?php echo $error["DateNai"]; ?></span></td>
                 <?php } ?>
             </tr>
             <tr>
                 <td>Adresse électronique :</td>
                 <td><input type="email" name="adElec" /></td>
-                <?php if(!$AdElecBon) { ?>
-                    <td><span><?php echo $AdElecErreur; ?></span></td>
+                <?php if(!empty($error["AdElec"])) { ?>
+                    <td><span><?php echo $error["AdElec"]; ?></span></td>
                 <?php } ?>
             </tr>
             <tr>
                 <td>Adresse postale :</td>
                 <td><input type="text" name="adPostale" /></td>
-                <?php if(!$AdPostaleBon) { ?>
-                    <td><span><?php echo $AdPostaleErreur; ?></span></td>
+                <?php if(!empty($error["AdPost"])) { ?>
+                    <td><span><?php echo $error["AdPost"]; ?></span></td>
                 <?php } ?>
             </tr>
             <tr>
                 <td>Code postal :</td>
                 <td><input type="text" name="codePostale" /></td>
-                <?php if(!$CodePostaleBon) { ?>
-                    <td><span><?php echo $CodePostaleErreur; ?></span></td>
+                <?php if(!empty($error["CodePost"])) { ?>
+                    <td><span><?php echo $error["CodePost"]; ?></span></td>
                 <?php } ?>
             </tr>
             <tr>
                 <td>Ville :</td>
                 <td><input type="text" name="ville" /></td>
-                <?php if(!$VilleBon) { ?>
-                    <td><span><?php echo $VilleErreur; ?></span></td>
+                <?php if(!empty($error["Ville"])) { ?>
+                    <td><span><?php echo $error["Ville"]; ?></span></td>
                 <?php } ?>
             </tr>
             <tr>
                 <td>Numéro de téléphone :</td>
                 <td><input type="tel" name="numero" /></td>
-                <?php if(!$NumeroBon) { ?>
-                    <td><span><?php echo $NumeroErreur; ?></span></td>
+                <?php if(!empty($error["Numero"])) { ?>
+                    <td><span><?php echo $error["Numero"]; ?></span></td>
                 <?php } ?>
             </tr>
         </table>
         <input type="submit" value="S'inscrire" name="submit" />
-
+        <img src="images/eye.png" id="viewpw" alt="afficher mot de passe" width="30px" border="1">
         <?php }
         ?>
 

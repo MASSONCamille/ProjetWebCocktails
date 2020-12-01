@@ -69,7 +69,7 @@ if (isset($_POST["submit"])){
         <div>
             <form action="Connexion.php" method="post">
                 <table>
-                    <tr id="tr_Login">
+                    <tr>
                         <td><label for="Login">Login : </label></td>
                         <td><input type="text" name="Login" id="Login" required="required" value="<?php if (isset($_POST['submit'])) echo $login; ?>"</td>
                     </tr>
@@ -80,7 +80,7 @@ if (isset($_POST["submit"])){
                     <tr>
                         <td><label for="Mdp">Mot de passe : </label></td>
                         <td><input type="password" name="Mdp" id="Mdp" required="required" value="<?php if (isset($_POST['submit'])) echo $mdp; ?>"></td>
-                        <td><button disabled><img id="viewpw" src="images/eye.png" alt="afficher mot de passe" width="30px"></button></td>
+                        <td><img src="images/eye.png" id="viewpw" alt="afficher mot de passe" width="30px" border="1"></td>
                     </tr>
                     <?php if(!empty($error["Mdp"])) {?>
                         <tr><td><?php echo $error["Mdp"];?></td></tr>
@@ -97,7 +97,6 @@ if (isset($_POST["submit"])){
 
             <div>
                 <a href="Inscription.php">Pas encore inscrit ?</a><br>
-                <a href="">Mot de passe oublié ?</a>
             </div>
         </div>
 
