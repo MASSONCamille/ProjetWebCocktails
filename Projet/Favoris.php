@@ -64,6 +64,7 @@ ________________________________________________________________________________
 
         <header>
             <ul>
+                <li><a href="Accueil.php">Accueil</a></li>
                 <li><a href="Favoris.php">Favoris</a></li>
                 <?php if(!isset($_SESSION['Login']) || $_SESSION['Login'] === "") { ?>
                     <li><a href="Connexion.php">Se connecter</a></li>
