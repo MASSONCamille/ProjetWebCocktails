@@ -69,6 +69,90 @@
     <head>
         <title>Accueil</title>
         <meta charset="utf-8" />
+        <link rel="stylesheet" href="style.css">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script>
+        $(function(){
+            var ListeAvecIngredient = [];
+            var ListeSansIngredient = [];
+
+            /*Array.prototype.remove = function() {
+                var what, liste = arguments, L = liste.length, ax;
+                while (L && this.length) {
+                    what = a[--L];
+                    while ((ax = this.indexOf(what)) !== -1) {
+                        this.splice(ax, 1);
+                    }
+                }
+                return this;
+            };*/
+
+            $("#nomRecette").keyup(function() {
+                var regex = new RegExp('\\b' + $(this).val().toLowerCase());
+                $("#ListeRecettes li").filter(function() {
+                    $(this).toggle(regex.test($(this).text().toLowerCase()));
+                });
+            });
+
+            $("#nomIngredient").keyup(function() {
+                $('#optionsCompletion').empty();
+                if($(this).val().trim() !== "") {
+                    $.get("script/get_tags_recherche.php?DebutRecherche="+$(this).val(), function(data) {
+                        var liste = JSON.parse(data);
+                        var listeRech = $.map(liste, function(n,i){return n.toLowerCase();});
+                        var listeRechAvec = $.map(ListeAvecIngredient, function(n,i){return n.toLowerCase();});
+                        var listeRechSans = $.map(ListeSansIngredient, function(n,i){return n.toLowerCase();});
+
+                        var ValRecherche = $("#nomIngredient").val().toLowerCase();
+                        
+                        $.each(liste, function(cle, valeur) {
+                            /*var Dedans1 = $.inArray(valeur, listeRechAvec);
+                            var Dedans2 = $.inArray(valeur, listeRechSans);
+                            if(Dedans1 != -1) {
+
+                            }
+                            else if(Dedans2 != -1) {
+
+                            }
+                            else {*/
+                                $('#optionsCompletion').append($("<option></option>").text(valeur));
+
+                                var Dedans3 = $.inArray(ValRecherche, listeRech);
+                                if(Dedans3 != -1) {
+                                    $('#avecIngredient').prop("disabled", false);
+                                    $('#sansIngredient').prop("disabled", false);
+                                } else {
+                                    $('#avecIngredient').prop("disabled", true);
+                                    $('#sansIngredient').prop("disabled", true);
+                                }
+                            //}
+                        });
+                    });
+                }
+            });
+
+            $("#avecIngredient").click(function() {
+                var valeur = $("#nomIngredient").val();
+                if($.inArray(valeur, ListeAvecIngredient) != 0) {
+                    ListeAvecIngredient.push(valeur);
+                }
+                $("#nomIngredient").val('');
+                $(this).prop("disabled", true);
+                $('#sansIngredient').prop("disabled", true);
+            });
+
+            $("#sansIngredient").click(function() {
+                var valeur = $("#nomIngredient").val();
+                if($.inArray(valeur, ListeSansIngredient) != 0) {
+                    ListeSansIngredient.push(valeur);
+                }
+                $("#nomIngredient").val('');
+                $(this).prop("disabled", true);
+                $('#avecIngredient').prop("disabled", true);
+            });
+        });
+        </script>
     </head>
 
     <body> <!-- a voir la gestion des erreurs -->
@@ -90,39 +174,51 @@
             </ul>
         </header>
 
-        <nav> <!-- Renommer var SousCateg (pas très indicatif) -->
-            <h2>Navigation</h2>
-            <p>
-                <?php
-                    foreach($CheminAcces as $Element) { ?>
-                        <a href="<?php echo $_SERVER['PHP_SELF']."?Position=".$Element; ?>"><?php echo $Element; ?>/</a>
-                <?php }
-                ?>
-            </p>
-            <ul>
-                <?php
-                    foreach($Hierarchie as $NomCateg => $TabSousCateg) {
-                        foreach($TabSousCateg as $NomSousCateg => $SousCateg) {
-                            if($NomSousCateg == 'super-categorie') {
-                                if(in_array($Position, $SousCateg)) { ?>
-                                    <li><a href="<?php echo $_SERVER['PHP_SELF']."?Position=".$NomCateg; ?>"><?php echo $NomCateg; ?></a></li>
-                                <?php }
+        <div id="Navigation">
+            <nav> <!-- Renommer var SousCateg (pas très indicatif) -->
+                <h2>Navigation</h2>
+                <p>
+                    <?php
+                        foreach($CheminAcces as $Element) { ?>
+                            <a href="<?php echo $_SERVER['PHP_SELF']."?Position=".$Element; ?>"><?php echo $Element; ?>/</a>
+                    <?php }
+                    ?>
+                </p>
+                <ul>
+                    <?php
+                        foreach($Hierarchie as $NomCateg => $TabSousCateg) {
+                            foreach($TabSousCateg as $NomSousCateg => $SousCateg) {
+                                if($NomSousCateg == 'super-categorie') {
+                                    if(in_array($Position, $SousCateg)) { ?>
+                                        <li><a href="<?php echo $_SERVER['PHP_SELF']."?Position=".$NomCateg; ?>"><?php echo $NomCateg; ?></a></li>
+                                    <?php }
+                                }
                             }
                         }
-                    }
-                ?>
-            </ul>
-        </nav>
+                    ?>
+                </ul>
+            </nav>
 
-        <div>
-            <h2>Recettes</h2>
-            <ul>
-                <?php
-                    foreach($RecettesRecherche as $CleRecette => $Recette) { ?>
-                        <li><a href="<?php echo "Recettes.php"."?Recette=".$CleRecette; ?>"><?php echo $Recette; ?></a></li>
-                <?php }
-                ?>
-            </ul>
+            <input id="nomRecette" type="text" placeholder="Recherche par nom">
+
+            <div>
+                <h2>Recettes</h2>
+                <ul id="ListeRecettes">
+                    <?php
+                        foreach($RecettesRecherche as $CleRecette => $Recette) { ?>
+                            <li><a href="<?php echo "Recettes.php"."?Recette=".$CleRecette; ?>"><?php echo $Recette; ?></a></li>
+                    <?php }
+                    ?>
+                </ul>
+            </div>
+        </div>
+
+        <div id="Recherche">
+            <input id="nomIngredient" type="text" placeholder="Recherche par ingrédient" list="optionsCompletion">
+            <input id="avecIngredient" type="button" value="Avec" disabled>
+            <input id="sansIngredient" type="button" value="Sans" disabled>
+            <datalist id="optionsCompletion" hidden>
+            </datalist>
         </div>
 
     </body>
