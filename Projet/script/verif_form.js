@@ -1,7 +1,5 @@
 $(function () {
 
-    var BtnMdp = $("#viewpw");
-
     var colorBon = "#00ff00";
     var colorFaux = "#ff0000";
 
@@ -31,7 +29,6 @@ $(function () {
                 },
                 error : function () {
                     $("input#Login").css("background-color", "white");
-                    console.log("error");
                 },
             });
         }
@@ -39,7 +36,7 @@ $(function () {
     });
 
 
-    BtnMdp.click(function () {
+    $("#viewpw").click(function () {
         if ($("input#Mdp").attr("type") == "password") $("input#Mdp").attr("type", "text");
         else $("input#Mdp").attr("type", "password");
         if (document.title == "Inscription") $("input#MdpConf").attr("type", $("input#Mdp").attr("type"));

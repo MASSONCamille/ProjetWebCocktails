@@ -17,4 +17,3 @@ if (!empty($login)){
     echo $exist;
 }
 echo false;
-?>

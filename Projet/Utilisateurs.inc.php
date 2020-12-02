@@ -12,5 +12,10 @@ $Utilisateurs = array(
 		'Ville' => 'Metz',
 		'Numero' => '0614279310',
 	),
+	'1' => array(
+		'Login' => 'Killcam57140',
+		'Mdp' => 'azerty',
+		'Sexe' => 'h',
+	),
 );
 ?>

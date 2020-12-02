@@ -13,38 +13,12 @@ ________________________________________________________________________________
 <?php
 
     include 'Donnees.inc.php';
-    include 'Favoris.funct.php';
+    include 'Favoris.inc.php';
 
     session_start();
 
     if(isset($_GET['Deconnexion']) && $_GET['Deconnexion'] == true)
         unset($_SESSION['Login']);
-
-    // BLOCK TEMPORAIRE imite la connexion
-    if (!empty($_POST['login'])){
-        $_SESSION['Login'] = $_POST['login'];
-        unset($_SESSION['favoris']);
-    }
-
-    if (isset($_POST['deco'])){
-        unset($_SESSION['Login']);
-    }
-
-    if (isset($_POST['idcocktail'])){
-        if ($_POST['mode'] == 'Add') addFav(intval($_POST['idcocktail']));
-        else delFav(intval($_POST['idcocktail']));
-    }
-
-    if (isset($_SESSION['Login'])){
-        include 'Favoris.inc.php';
-
-        if (isset($Favoris[$_SESSION["Login"]])) $Fav = $Favoris[$_SESSION['Login']];
-        else $Fav = array();
-
-    }else{
-        if(isset($_SESSION['favoris'])) $Fav = $_SESSION['favoris'];
-        else $Fav = NULL;
-    }
 
     $_SESSION['CheminAcces'] = "Favoris";
 
@@ -56,6 +30,8 @@ ________________________________________________________________________________
     <head>
         <title>Cocktails Favoris</title>
         <meta charset="utf-8" />
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="script/Favoris.js"></script>
     </head>
 
     <body>
@@ -77,48 +53,9 @@ ________________________________________________________________________________
             </ul>
         </header>
 
-        <div>
-            <?php if (empty($Fav)) {?>
-                <p>Pas de favoris</p>
-            <?php }else{ ?>
-
-                <ul>
-                <?php
-                    foreach ($Fav as $idFav => $idRec) {
-                        echo "<li>".$idRec."-> <a href='Recettes.php".'?Recette='.$idRec."'>".$Recettes[$idRec]["titre"]."</a></li>";
-                    }
-                ?>
-                </ul>
-                <?php
-                if (IsFav(0)) echo "la recette 0 est favori"; // Test pour IsFav()
-                else echo "la recette 0 n'est pas favori";
-                ?>
-
-            <?php } ?>
-
-            <form action="Favoris.php" method="post">
-                <input type="text" name="idcocktail">
-                <input type="submit" value="Add" name="mode">
-                <input type="submit" value="Del" name="mode">
-            </form>
-
-
-            <!-- BLOCK TEMPORAIRE formulaire de connection simplifier -->
-            <br><br><br><br>
-            <p>Donné votre login :</p>
-            <form action="Favoris.php" method="post">
-                <input type="text" name="login">
-                <input type="submit" value="Login Session">
-            </form>
-
-            <form action="Favoris.php" method="post">
-                <input type="submit" value="Deconnexion" name="deco">
-            </form>
-
-            <!-- BLOCK TEMPORAIRE affichage $_SESSION -->
-            <br><br>
-            <?php print_r($_SESSION); ?>
+        <div id="div_fav">
         </div>
+
     </body>
 
 </html>

@@ -55,6 +55,9 @@ function titletoimgsrc($str)
     <head>
         <meta charset="utf-8">
         <title>Recettes Cocktails</title>
+        <script> var idCocktail = <?php echo $id;?>; </script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="script/Recettes.js"></script>
     </head>
 
     <body> <!-- a voir la gestion des erreurs -->
@@ -102,7 +105,6 @@ function titletoimgsrc($str)
         </ul>
         <h3>Description</h3>
         <p><?=$Recettes[$id]['preparation']?></p>
-        <button type="button">Ajouter aux Favoris</button>
         <?php } ?>
 
         <div>
@@ -115,5 +117,6 @@ function titletoimgsrc($str)
             <?php } ?>
         </div>
 
+        <button id="btn_fav"></button>
     </body>
 </html>
