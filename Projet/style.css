@@ -129,7 +129,7 @@ div {
 div ul {
     margin-left: 5%;
 }
-div p, div input, #RechercheCriteres {
+div p, div input, #RechercheCriteres, nav p a {
     margin-left: 3%;
 }
 div input {
@@ -144,7 +144,7 @@ div input {
     font-size: 14px;
     font-weight: bold;
 }
-#RechercheCriteres, #ResultatsRecherche {
+#RechercheCriteres, #ResultatsRecherche, #Ingredient, #Description {
     display: inline-block;
 }
 #avecIngredient, #sansIngredient {

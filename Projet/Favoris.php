@@ -38,7 +38,7 @@ ________________________________________________________________________________
     <body>
 
         <header>
-            <h1><a href="Accueil.php">Les recettes de Mamille</a></h1>
+            <h1><a href="Accueil.php">Recettes de Cocktailes</a></h1>
             <ul>
                 <li><a href="Accueil.php">Accueil</a></li>
                 <li><a href="Favoris.php">Favoris</a></li>
