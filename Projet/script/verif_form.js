@@ -10,7 +10,7 @@ $(function () {
         if (login.length == 0){
             $("input#Login").css("background-color", "white");
         }else if(login.length < 3){
-            $("input#Login").css("background-color", "#ff0000");
+            $("input#Login").css("background-color", colorFaux);
         }else{
             $.ajax({
                 type:'POST',
@@ -39,6 +39,5 @@ $(function () {
     $("#viewpw").click(function () {
         if ($("input#Mdp").attr("type") == "password") $("input#Mdp").attr("type", "text");
         else $("input#Mdp").attr("type", "password");
-        if (document.title == "Inscription") $("input#MdpConf").attr("type", $("input#Mdp").attr("type"));
     });
 });

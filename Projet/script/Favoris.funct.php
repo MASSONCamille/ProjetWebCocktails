@@ -82,5 +82,6 @@ if (!empty($_POST["mode"])){
     if ($_POST["mode"] == "del") echo delFav($_POST["id"]);
     else if($_POST["mode"] == "add") echo addFav($_POST["id"]);
     else if($_POST["mode"] == "mod") echo modFav($_POST["id"]);
-    else echo IsFav($_POST["id"]);
+    else if($_POST["mode"] == "test") echo IsFav($_POST["id"]);
+    else echo "Error mode";
 }

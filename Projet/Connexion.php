@@ -29,7 +29,7 @@ if (isset($_POST["submit"])){
 
     if(empty($error)){
         $_SESSION['Login'] = $login;
-        header('Location: '.$_SERVER['PHP_SELF'].'/../Accueil.php');
+        header('Location: Accueil.php');
     }
 
 }

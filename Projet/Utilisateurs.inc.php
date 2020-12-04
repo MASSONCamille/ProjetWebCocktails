@@ -3,9 +3,10 @@ $Utilisateurs = array(
 	'0' => array(
 		'Login' => 'MajorAeon',
 		'Mdp' => '123',
-		'Nom' => '2000-08-16',
+		'Nom' => 'Sizaire',
 		'Prenom' => 'Lorian',
 		'Sexe' => 'h',
+        'Naissance' => '2000-08-16',
 		'AdElec' => 'lorian.sizaire@gmail.com',
 		'AdPostale' => '38 rue Saint-Martin',
 		'CodePostale' => '57000',
@@ -15,6 +16,7 @@ $Utilisateurs = array(
 	'1' => array(
 		'Login' => 'Killcam57140',
 		'Mdp' => 'azerty',
+
 		'Sexe' => 'h',
 	),
 );
