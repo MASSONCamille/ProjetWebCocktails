@@ -220,6 +220,7 @@
                 <td>Mot de passe* :</td>
                 <td><input id="Mdp" type="password" name="mdp" required="required"
                            value="<?php if (isset($_POST['submit']) && empty($error["Mdp"])) echo $_POST['mdp']; ?>" /></td>
+                <td><img src="images/eye.png" id="viewpw" alt="afficher mot de passe" width="30px" border="1"></td>
                 <?php if(!empty($error["Mdp"])) { ?>
                     <td><span><?php echo $error["Mdp"]; ?></span></td>
                 <?php } ?>
@@ -308,10 +309,10 @@
             </tr>
         </table>
         <input type="submit" value="S'inscrire" name="submit" />
-        <img src="images/eye.png" id="viewpw" alt="afficher mot de passe" width="30px" border="1">
-        <?php }
-        ?>
+    </form>
+<?php }
+?>
 
-    </body>
+</body>
 
 </html>
