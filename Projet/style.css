@@ -1,0 +1,152 @@
+body {
+    padding-top: 150px;
+    color: #666666;
+    font-size: 14px;
+    font-family: 'poppins', sans-serif;
+    line-height: 1.80857;
+    font-weight: normal;
+}
+p {
+    margin: 0px;
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 24px;
+}
+
+a {
+    color: #1f1f1f;
+    text-decoration: none !important;
+    outline: none !important;
+    -webkit-transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -ms-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+    transition: all .3s ease-in-out;
+}
+a:hover {
+    color: rgb(134, 89, 89);
+    font-size: 15px;
+}
+h1, h2, h3, h4, h5, h6, #BtnChangerRecherche {
+    margin-left: 1%;
+}
+h1 {
+    font-size: 24px;
+}
+h2 {
+    font-size: 22px 
+}
+h3 {
+    font-size: 18px 
+}
+h4 {
+    font-size: 16px 
+}
+h5 {
+    font-size: 14px 
+}
+h6 {
+    font-size: 13px 
+}
+
+ul, li, ol {
+    margin: 0px;
+    padding: 0px;
+    list-style: square;
+}
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+button {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+}
+button:focus {
+    outline: none;
+}
+
+header {
+    height: 100px;
+    background: #212020;
+    padding: 15px 0;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index:1000;
+}
+header a {
+    color: white;
+    font-size: 16px;
+}
+header a:hover {
+    color: rgb(206, 138, 12);
+    font-size: 16px;
+}
+header h1 a {
+    color: white;
+    font-size: 24px;
+}
+header h1 a:hover {
+    font-size: 24px;
+}
+header h1 {
+    text-align: center
+}
+header li {
+    display: inline;
+    text-align: center;
+    padding: 2px;
+    margin: 8%;
+}
+header ul {
+    text-align: center;
+}
+
+nav a {
+    color: #68441c;
+}
+nav p a {
+    color: #b66c18;
+}
+nav p a:hover {
+    color: #7e4a0e;
+    font-weight: bold;
+}
+nav li:before {
+    content: "\00BB";
+}
+nav li {
+    list-style: none;
+}
+div {
+    vertical-align: top;
+}
+div ul {
+    margin-left: 5%;
+}
+div p, div input, #RechercheCriteres {
+    margin-left: 3%;
+}
+div input {
+    margin-bottom: 20px;
+}
+#NavRes ul {
+    -webkit-column-count: 3;
+    -moz-column-count: 3;
+    column-count: 3;
+}
+#NavRes a:hover {
+    font-size: 14px;
+    font-weight: bold;
+}
+#RechercheCriteres, #ResultatsRecherche {
+    display: inline-block;
+}
+#avecIngredient, #sansIngredient {
+    margin-left: 2px;
+}

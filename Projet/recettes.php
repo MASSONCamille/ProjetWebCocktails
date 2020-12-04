@@ -55,16 +55,16 @@ function titletoimgsrc($str)
     <head>
         <meta charset="utf-8">
         <title>Recettes Cocktails</title>
+        <link rel="stylesheet" href="style.css">
         <script> var idCocktail = <?php echo $id;?>; </script>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="script/Recettes.js"></script>
     </head>
 
-    <body> <!-- a voir la gestion des erreurs -->
-
-        <h1><a href="Accueil.php">Les recettes de Mamille</a></h1>
+    <body>
 
         <header>
+            <h1><a href="Accueil.php">Les recettes de Mamille</a></h1>
             <ul>
                 <li><a href="Accueil.php">Accueil</a></li>
                 <li><a href="Favoris.php">Favoris</a></li>

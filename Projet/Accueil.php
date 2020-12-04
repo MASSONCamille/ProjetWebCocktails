@@ -51,6 +51,7 @@
         $(function(){
             var ListeAvecIngredient = [];
             var ListeSansIngredient = [];
+            var DivRechercheActu = 1;
 
             $("#nomRecette").keyup(function() {
                 var regex = new RegExp('\\b' + $(this).val().toLowerCase());
@@ -137,15 +138,30 @@
                 else
                     $('#ResultatsRecherche table > tbody').empty();;
             });
+
+            $('#BtnChangerRecherche').click(function() {
+                var DivNavigation = $("#Navigation");
+                var DivCritere = $("#Recherche");
+                if(DivRechercheActu) {
+                    DivNavigation.hide(250);
+                    DivCritere.show(250);
+                    DivRechercheActu = 0;
+                }  
+                else {
+                    DivCritere.hide(250);  
+                    DivNavigation.show(250);
+                    DivRechercheActu = 1;
+                }
+                
+            });
         });
         </script>
     </head>
 
     <body>
 
-        <h1><a href="Accueil.php">Les recettes de Mamille</a></h1>
-
         <header>
+            <h1><a href="Accueil.php">Les recettes de Mamille</a></h1>
             <ul>
                 <li><a href="Accueil.php">Accueil</a></li>
                 <li><a href="Favoris.php">Favoris</a></li>
@@ -160,75 +176,79 @@
             </ul>
         </header>
 
-        <div id="Navigation">
-            <nav>
-                <h2>Navigation</h2>
-                <p>
-                    <?php
-                        foreach($CheminAcces as $Element) { ?>
-                            <a href="<?php echo $_SERVER['PHP_SELF']."?Position=".$Element; ?>"><?php echo $Element; ?>/</a>
-                    <?php }
-                    ?>
-                </p>
-                <ul>
-                    <?php
-                        foreach($Hierarchie as $NomCateg => $TabSousCateg) {
-                            foreach($TabSousCateg as $NomSousCateg => $SousCateg) {
-                                if($NomSousCateg == 'super-categorie') {
-                                    if(in_array($Position, $SousCateg)) { ?>
-                                        <li><a href="<?php echo $_SERVER['PHP_SELF']."?Position=".$NomCateg; ?>"><?php echo $NomCateg; ?></a></li>
-                                    <?php }
+        <input id="BtnChangerRecherche" type="button" value="Changer de recherche"/>
+            <div id="Navigation">
+                <nav>
+                    <h2>Navigation</h2>
+                    <p>
+                        <?php
+                            foreach($CheminAcces as $Element) { ?>
+                                <a href="<?php echo $_SERVER['PHP_SELF']."?Position=".$Element; ?>"><?php echo $Element; ?> /</a>
+                        <?php }
+                        ?>
+                    </p>
+                    <ul>
+                        <?php
+                            foreach($Hierarchie as $NomCateg => $TabSousCateg) {
+                                foreach($TabSousCateg as $NomSousCateg => $SousCateg) {
+                                    if($NomSousCateg == 'super-categorie') {
+                                        if(in_array($Position, $SousCateg)) { ?>
+                                            <li><a href="<?php echo $_SERVER['PHP_SELF']."?Position=".$NomCateg; ?>"> <?php echo $NomCateg; ?></a></li>
+                                        <?php }
+                                    }
                                 }
                             }
-                        }
-                    ?>
-                </ul>
-            </nav>
+                        ?>
+                    </ul>
+                </nav>
 
-            <input id="nomRecette" type="text" placeholder="Recherche par nom">
-
-            <div>
-                <h2>Recettes</h2>
-                <ul id="ListeRecettes">
-                    <?php
-                        foreach($RecettesRecherche as $CleRecette => $Recette) { ?>
-                            <li><a href="<?php echo "Recettes.php"."?Recette=".$CleRecette; ?>"><?php echo $Recette; ?></a></li>
-                    <?php }
-                    ?>
-                </ul>
+                <div id="NavRes">
+                    <h2>Recettes</h2>
+                    <input id="nomRecette" type="text" placeholder="Recherche par nom"/>
+                    <ul id="ListeRecettes">
+                        <?php
+                            foreach($RecettesRecherche as $CleRecette => $Recette) { ?>
+                                <li><a href="<?php echo "Recettes.php"."?Recette=".$CleRecette; ?>"><?php echo $Recette; ?></a></li>
+                        <?php }
+                        ?>
+                    </ul>
+                </div>
             </div>
-        </div>
 
-        <div id="Recherche">
-            <input id="nomIngredient" type="text" placeholder="Recherche par ingrédient" list="optionsCompletion">
-            <input id="avecIngredient" type="button" value="Avec" disabled>
-            <input id="sansIngredient" type="button" value="Sans" disabled>
-            <datalist id="optionsCompletion" hidden></datalist>
+            <div id="Recherche" style="display: none;">
+                <div>
+                    <h3>Critères de recherche</h3>
+                    <input id="nomIngredient" type="text" placeholder="Recherche par ingrédient" list="optionsCompletion"/>
+                    <input id="avecIngredient" type="button" value="Avec" disabled/>
+                    <input id="sansIngredient" type="button" value="Sans" disabled/>
+                    <datalist id="optionsCompletion" hidden></datalist>
+                </div>
 
-            <h3>Critères de recherche</h3>
-            <table id="tableAvec">
-                <tr>
-                    <td colspan="2">Avec l'ingrédient</td>
-                </tr>
-            </table>
-            <table id="tableSans">
-                <tr>
-                    <td colspan="2">Sans l'ingrédient</td>
-                </tr>
-            </table>
-
-            <div id="ResultatsRecherche">
-                <table>
-                    <thead>
+                <div id="RechercheCriteres">
+                    <table id="tableAvec">
                         <tr>
-                            <td>Nom de la recette</td>
-                            <td>Score de satisfaction</td>
-                        </tr> 
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                            <td colspan="2">Avec l'ingrédient</td>
+                        </tr>
+                    </table>
+                    <table id="tableSans">
+                        <tr>
+                            <td colspan="2">Sans l'ingrédient</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div id="ResultatsRecherche">
+                    <table>
+                        <thead>
+                            <tr>
+                                <td>Nom de la recette</td>
+                                <td>Score de satisfaction</td>
+                            </tr> 
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </div>
-        </div>
 
     </body>
 
