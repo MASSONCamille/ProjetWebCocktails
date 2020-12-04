@@ -41,15 +41,15 @@ if (isset($_POST["submit"])){
     <head>
         <title>Connexion</title>
         <meta charset="utf-8" />
+        <link rel="stylesheet" href="style.css">
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="script/verif_form.js"></script>
     </head>
 
-    <body> <!-- a voir la gestion des erreurs -->
-
-        <h1><a href="Accueil.php">Les recettes de Mamille</a></h1>
+    <body>
 
         <header>
+            <h1><a href="Accueil.php">Les recettes de Mamille</a></h1>
             <ul>
                 <li><a href="Accueil.php">Accueil</a></li>
                 <li><a href="Favoris.php">Favoris</a></li>
