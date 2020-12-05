@@ -1,20 +1,21 @@
-<?php //Verifier orthographe commentaire
+<?php
+    //Include des données et fonctions nécessaires aux recherches
     include 'Donnees.inc.php';
     include 'Recherche.funct.php';
 
     session_start();
 
-    if(isset($_GET['Deconnexion']) && $_GET['Deconnexion'] == true)
+    if(isset($_GET['Deconnexion']) && $_GET['Deconnexion'] == true) //Vérifie si une demande de déconnexion a été faite
         unset($_SESSION['Login']);
 
-    if(!isset($_GET['Position']))
+    if(!isset($_GET['Position'])) //Attribut la position dans la hiérarchie
         $Position = 'Aliment';
     else
         $Position = $_GET['Position'];
 
-    if((!isset($_SESSION['CheminAcces'])) || ($Position == 'Aliment'))
+    if((!isset($_SESSION['CheminAcces'])) || ($Position == 'Aliment')) //On initialise le parcours dans la hiérarchie à Aliment si besoin
         $CheminAcces = array('Aliment');
-    else {
+    else { //Sinon on récupère le parcours effectué jusqu'ici
         $CheminAcces = $_SESSION['CheminAcces'];
         $taille = count($CheminAcces);
         $Cle = 0;
@@ -46,6 +47,7 @@
         <meta charset="utf-8" />
         <link rel="stylesheet" href="style.css">
 
+        <!-- PARTIE JQUERY DE LA PAGE ACCUEIL -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script>
         $(function(){
@@ -53,39 +55,39 @@
             var ListeSansIngredient = [];
             var DivRechercheActu = 1;
 
-            $("#nomRecette").keyup(function() {
+            $("#nomRecette").keyup(function() { //Permet de chercher les noms de recettes commençant par le nom entré
                 var regex = new RegExp('\\b' + $(this).val().toLowerCase());
                 $("#ListeRecettes li").filter(function() {
                     $(this).toggle(regex.test($(this).text().toLowerCase()));
                 });
             });
 
-            $("#nomIngredient").keyup(function() {
-                $('#avecIngredient').prop("disabled", true);
+            $("#nomIngredient").keyup(function() { //Permet d'ajouter à la datalist optionsCompletion les ingrédients commençant par le nom entré
+                $('#avecIngredient').prop("disabled", true); //Désactivation des boutons d'ajouts des ingrédients
                 $('#sansIngredient').prop("disabled", true);
-                $('#optionsCompletion').empty();
+                $('#optionsCompletion').empty(); //Vidage de la datalist
                 if($(this).val().trim() !== "") {
-                    $.get("script/get_tags_recherche.php?DebutRecherche="+$(this).val(), function(Data) {
+                    $.get("script/get_tags_recherche.php?DebutRecherche="+$(this).val(), function(Data) { //On récupère la liste en envoyant le nom au php
                         var Liste = JSON.parse(Data);
-                        var ListeRecherche = $.map(Liste, function(Val,i){return Val.toLowerCase();});
+                        var ListeRecherche = $.map(Liste, function(Val,i){return Val.toLowerCase();}); //On crée des listes de recherches à partir des listes des critères et de la liste du php
                         var ListeRechercheAvec = $.map(ListeAvecIngredient, function(Val,i){return Val.toLowerCase();});
                         var ListeRechercheSans = $.map(ListeSansIngredient, function(Val,i){return Val.toLowerCase();});                       
-                        $.each(Liste, function(Cle, Valeur) {
+                        $.each(Liste, function(Cle, Valeur) { //On vérifie pour chaque membre (suggestion) de la liste php si elle existe déjà dans les listes de critères pour pouvoir les garder ou non
                             if(!ListeRechercheAvec.includes(Valeur.toLowerCase()) && !ListeRechercheSans.includes(Valeur.toLowerCase())) {
                                 $('#optionsCompletion').append($("<option></option>").text(Valeur));
                             }
                         });
 
                         var ValRecherche = $("#nomIngredient").val().trim().toLowerCase();
-                        if(ListeRecherche.includes(ValRecherche) && !ListeRechercheAvec.includes(ValRecherche) && !ListeRechercheSans.includes(ValRecherche)) {
-                            $('#avecIngredient').prop("disabled", false);
+                        if(ListeRecherche.includes(ValRecherche) && !ListeRechercheAvec.includes(ValRecherche) && !ListeRechercheSans.includes(ValRecherche)) { //On vérifie que le nom entré est dans la liste 
+                            $('#avecIngredient').prop("disabled", false);                                                                                       //des suggestions et dans aucune des listes des critères
                             $('#sansIngredient').prop("disabled", false); 
                         } 
                     });
                 }
             });
 
-            $.fn.afficherRecettesResultats = function(ResTable) {
+            $.fn.afficherRecettesResultats = function(ResTable) { //Fonction qui permet de remplir la table avec les résultats de la recherche
                 TableAffiche = $('#ResultatsRecherche table > tbody');
                 TableAffiche.empty();
                 $.each(ResTable, function(Cle, Valeur) {
@@ -93,15 +95,16 @@
                 });
             }
 
-            $.fn.rechercheRecettesCriteres = function() {
+            $.fn.rechercheRecettesCriteres = function() { //Fonction qui envoie les listes de critères et puis reçoit la liste réponse de la recherche
                 $.post("script/recherche_recettes_criteres.php", { 'IngredientsAvec': ListeAvecIngredient, 'IngredientsSans': ListeSansIngredient }, function(Data) {
                     $(this).afficherRecettesResultats(Data);
                 }, "json").fail(function(Data) {
                     console.log(Data.responseText);
+                    alert("Erreur dans l'envoie de la recherche. Le serveur est peut-être en maintenance.")
                 });
             }
 
-            $.fn.ajoutIngredientRecherche = function(liste, idtable) {
+            $.fn.ajoutIngredientRecherche = function(liste, idtable) { //Fonction qui ajoute les ingrédients critères à la table correspondante
                 var Valeur = $("#nomIngredient").val().trim().toLowerCase();
                 if($.inArray(Valeur, liste) != 0) {
                     liste.push(Valeur);
@@ -114,15 +117,15 @@
                 $(this).rechercheRecettesCriteres();
             };
 
-            $("#avecIngredient").click(function() {
+            $("#avecIngredient").click(function() { //Fonction (onClick) du bouton Avec qui ajoute le nom entré à la table de critère correspondant
                 $(this).ajoutIngredientRecherche(ListeAvecIngredient, '#tableAvec');
             });
 
-            $("#sansIngredient").click(function() {
+            $("#sansIngredient").click(function() { //Fonction du bouton Sans qui ajoute le nom entré à la table de critère correspondant
                 $(this).ajoutIngredientRecherche(ListeSansIngredient, '#tableSans');
             });
 
-            $("table").on("click", "input.btnSupprimerCritere", function() {
+            $("table").on("click", "input.btnSupprimerCritere", function() { //Fonction (onClick) des boutons supprimer qui retire le critère associé de sa table
                 var tdActu = $(this).parent();
                 var valeur = tdActu.prev().text().trim().toLowerCase();
                 if($.inArray(valeur, ListeAvecIngredient) != -1)
@@ -139,7 +142,7 @@
                     $('#ResultatsRecherche table > tbody').empty();;
             });
 
-            $('#BtnChangerRecherche').click(function() {
+            $('#BtnChangerRecherche').click(function() { //Bouton qui permet de passer d'une recherche à l'autre (affiche l'un des deux divs)
                 var DivNavigation = $("#Navigation");
                 var DivCritere = $("#Recherche");
                 if(DivRechercheActu) {
@@ -160,12 +163,12 @@
 
     <body>
 
-        <header>
-            <h1><a href="Accueil.php">Les recettes de Mamille</a></h1>
+        <header> <!-- Header qui permet d'accéder aux différentes pages de l'application -->
+            <h1><a href="Accueil.php">Recettes de Cocktailes</a></h1>
             <ul>
                 <li><a href="Accueil.php">Accueil</a></li>
                 <li><a href="Favoris.php">Favoris</a></li>
-                <?php if(!isset($_SESSION['Login']) || $_SESSION['Login'] === "") { ?>
+                <?php if(!isset($_SESSION['Login']) || $_SESSION['Login'] === "") { ?> <!-- Affiche l'accès aux pages connexion, inscription et déconnexion en fonction de si l'utilisateur est connecté -->
                     <li><a href="Connexion.php">Se connecter</a></li>
                     <li><a href="Inscription.php">S'inscrire</a></li>
                 <?php }
@@ -177,11 +180,11 @@
         </header>
 
         <input id="BtnChangerRecherche" type="button" value="Changer de recherche"/>
-            <div id="Navigation">
+            <div id="Navigation"> <!-- PARTIE RECHERCHE AVEC PARCOURS -->
                 <nav>
                     <h2>Navigation</h2>
                     <p>
-                        <?php
+                        <?php //Affiche le chemin d'accès (en fonction de la hiérarchie)
                             foreach($CheminAcces as $Element) { ?>
                                 <a href="<?php echo $_SERVER['PHP_SELF']."?Position=".$Element; ?>"><?php echo $Element; ?> /</a>
                         <?php }
@@ -189,7 +192,7 @@
                     </p>
                     <ul>
                         <?php
-                            foreach($Hierarchie as $NomCateg => $TabSousCateg) {
+                            foreach($Hierarchie as $NomCateg => $TabSousCateg) { //Affiche les différents chemins possibles
                                 foreach($TabSousCateg as $NomSousCateg => $SousCateg) {
                                     if($NomSousCateg == 'super-categorie') {
                                         if(in_array($Position, $SousCateg)) { ?>
@@ -206,7 +209,7 @@
                     <h2>Recettes</h2>
                     <input id="nomRecette" type="text" placeholder="Recherche par nom"/>
                     <ul id="ListeRecettes">
-                        <?php
+                        <?php //Affiche les recettes accessibles depuis l'emplacement dans la hiérarchie
                             foreach($RecettesRecherche as $CleRecette => $Recette) { ?>
                                 <li><a href="<?php echo "Recettes.php"."?Recette=".$CleRecette; ?>"><?php echo $Recette; ?></a></li>
                         <?php }
@@ -215,7 +218,7 @@
                 </div>
             </div>
 
-            <div id="Recherche" style="display: none;">
+            <div id="Recherche" style="display: none;"> <!-- PARTIE RECHERCHE AVEC CRITERES -->
                 <div>
                     <h3>Critères de recherche</h3>
                     <input id="nomIngredient" type="text" placeholder="Recherche par ingrédient" list="optionsCompletion"/>
@@ -227,18 +230,18 @@
                 <div id="RechercheCriteres">
                     <table id="tableAvec">
                         <tr>
-                            <td colspan="2">Avec l'ingrédient</td>
+                            <td colspan="2">Avec l'ingrédient</td> <!-- Tables des ingrédients Avec -->
                         </tr>
                     </table>
                     <table id="tableSans">
                         <tr>
-                            <td colspan="2">Sans l'ingrédient</td>
+                            <td colspan="2">Sans l'ingrédient</td> <!-- Tables des ingrédients Sans -->
                         </tr>
                     </table>
                 </div>
 
                 <div id="ResultatsRecherche">
-                    <table>
+                    <table> <!-- Table des recettes de la recherche -->
                         <thead>
                             <tr>
                                 <td>Nom de la recette</td>

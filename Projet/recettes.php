@@ -3,10 +3,10 @@
 
     session_start();
 
-    if(isset($_GET['Deconnexion']) && $_GET['Deconnexion'] == true)
+    if(isset($_GET['Deconnexion']) && $_GET['Deconnexion'] == true) //Vérification pour la déconnexion
         unset($_SESSION['Login']);
 
-    if(isset($_GET['Recette'])){
+    if(isset($_GET['Recette'])) { //Récupération de l'id de la recette
         $id = $_GET['Recette'];
     }else{
         $id = 0;
@@ -16,7 +16,7 @@
     $VientDeFavoris = is_string($CheminAcces);
 
 
-function remove_accent($str)
+function remove_accent($str) //Fonction de remplacement des accents
 {
     $a = array('À', 'Á', 'Â', 'Ã', 'Ä', 'Å', 'Æ', 'Ç', 'È', 'É', 'Ê', 'Ë', 'Ì', 'Í', 'Î', 'Ï', 'Ð', 'Ñ', 'Ò', 'Ó', 'Ô',
         'Õ', 'Ö', 'Ø', 'Ù', 'Ú', 'Û', 'Ü', 'Ý', 'ß', 'à', 'á', 'â', 'ã', 'ä', 'å', 'æ', 'ç', 'è', 'é', 'ê', 'ë', 'ì',
@@ -64,7 +64,7 @@ function titletoimgsrc($str)
     <body>
 
         <header>
-            <h1><a href="Accueil.php">Les recettes de Mamille</a></h1>
+            <h1><a href="Accueil.php">Recettes de Cocktailes</a></h1>
             <ul>
                 <li><a href="Accueil.php">Accueil</a></li>
                 <li><a href="Favoris.php">Favoris</a></li>
@@ -79,44 +79,54 @@ function titletoimgsrc($str)
             </ul>
         </header>
 
-        <nav>
-            <h2>Navigation</h2>
-            <p>
-                <?php //Attention mettre une condition si on vient des favoris
-                    if($VientDeFavoris) { ?>
-                        <a href="Favoris.php">Retour aux favoris</a>
-                    <?php } else {
-                    foreach($CheminAcces as $Element) { ?>
-                        <a href='<?php echo 'Accueil.php?Position='.$Element; ?>'><?php echo $Element; ?>/</a>
-                <?php }
-                    }
-                ?>
-            </p>
-        </nav>
+        <div id="Navigation">
+            <nav>
+                <h2>Navigation</h2>
+                <p>
+                    <?php
+                        if($VientDeFavoris) { ?>
+                            <a href="Favoris.php">Retour aux favoris</a>
+                        <?php } else {
+                        foreach($CheminAcces as $Element) { ?>
+                            <a href='<?php echo 'Accueil.php?Position='.$Element; ?>'><?php echo $Element; ?>/</a>
+                    <?php }
+                        }
+                    ?>
+                </p>
+            </nav>
+        </div>
 
         <?php
         if(array_key_exists($id, $Recettes)){ ?>
         <h2><?= $Recettes[$id]['titre']?></h2>
-        <h3>Ingrédients</h3>
-        <ul>
-            <?php foreach(explode("|", $Recettes[$id]['ingredients']) as $ing){ ?>
-            <li><?=$ing?></li>
-            <?php } ?>
-        </ul>
-        <h3>Description</h3>
-        <p><?=$Recettes[$id]['preparation']?></p>
-        <?php } ?>
-
-        <div>
-            <?php
-                $srcimg = titletoimgsrc($Recettes[$id]['titre']);
-                if (file_exists($srcimg)){ ?>
-                <img src="<?php echo $srcimg; ?>" alt="image indisponible">
-            <?php }else{ ?>
-                <p>Photo indisponible</p>
-            <?php } ?>
+        <div id="Ingredients">
+            <h3>Ingrédients</h3>
+            <ul>
+                <?php foreach(explode("|", $Recettes[$id]['ingredients']) as $ing){ ?>
+                <li><?=$ing?></li>
+                <?php } ?>
+            </ul>
         </div>
 
-        <button id="btn_fav"></button>
+        <div id="Description">
+            <h3>Description</h3>
+            <p><?=$Recettes[$id]['preparation']?></p>
+            
+            <div>
+                <?php
+                    $srcimg = titletoimgsrc($Recettes[$id]['titre']);
+                    if (file_exists($srcimg)){ ?>
+                    <img src="<?php echo $srcimg; ?>" alt="image indisponible">
+                <?php }else{ ?>
+                    <p>Photo indisponible</p>
+                <?php } ?>
+            </div>
+
+            <button id="btn_fav"></button>
+
+            <?php } else { ?>
+                Recette inexistante!
+            <?php } ?>
+        </div>
     </body>
 </html>
