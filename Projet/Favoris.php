@@ -1,15 +1,3 @@
-<!--
-Liste des Favoris pour un Utilisateur : (Camille MASSON)
-
-Si conecter (via $_SESSION)
-    |recuperer dans le fichier favori la liste correspondant a l'utilisateur
-Sinon
-    |Créer un cookie qui stock les données
-   Fin Si
-________________________________________________________________________________________________________________________
-
--->
-
 <?php
 
     include 'Donnees.inc.php';

@@ -165,6 +165,12 @@
         fwrite($fileUser, $buffer);
         fclose($fileUser);
         $InscritBon = true;
+
+        if (!empty($_SESSION["favoris"])) {
+            include 'script/Favoris.funct.php';
+            TransfertFav($_SESSION["favoris"]);
+            unset($_SESSION["favoris"]);
+        }
     }
 
 ?>

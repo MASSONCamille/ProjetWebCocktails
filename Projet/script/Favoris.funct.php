@@ -1,5 +1,8 @@
 <?php
+
 function RWFav($Favoris){
+    if (dirname($_SERVER['PHP_SELF']) == '/ProjetCocktails/Projet/script') $path = '../';
+    else $path  = '';
 
     $buffer = "<?php\n\$Favoris = array(\n";
     foreach ($Favoris as $x => $fav) {
@@ -11,7 +14,7 @@ function RWFav($Favoris){
     };
     $buffer .= ");\n?>";
 
-    $filefav = fopen('../Favoris.inc.php', 'w');
+    $filefav = fopen($path.'Favoris.inc.php', 'w');
     fwrite($filefav, $buffer);
     fclose($filefav);
 };
@@ -19,9 +22,12 @@ function RWFav($Favoris){
 
 
 function IsFav($idCocktail){
+    if (dirname($_SERVER['PHP_SELF']) == '/ProjetCocktails/Projet/script') $path = '../';
+    else $path  = '';
+
     if (session_status() != PHP_SESSION_ACTIVE) session_start();
     if(isset($_SESSION['Login'])){ // Utilisateur connecter
-        include "../Favoris.inc.php";
+        include $path.'Favoris.inc.php';
         if (isset($Favoris)) return in_array($idCocktail, $Favoris[$_SESSION['Login']]);
 
     }else{ // Utilisateur non connecter
@@ -34,10 +40,13 @@ function IsFav($idCocktail){
 
 
 function addFav($idCocktail){
+    if (dirname($_SERVER['PHP_SELF']) == '/ProjetCocktails/Projet/script') $path = '../';
+    else $path  = '';
+
     if (session_status() != PHP_SESSION_ACTIVE) session_start();
     if (IsFav($idCocktail)) return false;
     if(isset($_SESSION['Login'])){ // Utilisateur connecter
-        include "../Favoris.inc.php";
+        include $path.'Favoris.inc.php';
         if (!isset($Favoris)) $Favoris = array();
         if (empty($Favoris[$_SESSION['Login']])) $Favoris[$_SESSION['Login']] = array();
         $Favoris[$_SESSION['Login']][] = $idCocktail;
@@ -52,10 +61,13 @@ function addFav($idCocktail){
 
 
 function delFav($idCocktail){
+    if (dirname($_SERVER['PHP_SELF']) == '/ProjetCocktails/Projet/script') $path = '../';
+    else $path  = '';
+
     if (session_status() != PHP_SESSION_ACTIVE) session_start();
     if (!IsFav($idCocktail)) return false;
     if(isset($_SESSION['Login'])){ // Utilisateur connecter
-        include "../Favoris.inc.php";
+        include $path.'Favoris.inc.php';
         if (!isset($Favoris)) return false;
         unset($Favoris[$_SESSION['Login']][array_search($idCocktail, $Favoris[$_SESSION['Login']])]);
         RWFav($Favoris);
@@ -66,12 +78,34 @@ function delFav($idCocktail){
     return true;
 };
 
+function TransfertFav($ListId){
+    if (dirname($_SERVER['PHP_SELF']) == '/ProjetCocktails/Projet/script') $path = '../';
+    else $path  = '';
+
+    if (session_status() != PHP_SESSION_ACTIVE) session_start();
+
+    if(isset($_SESSION['Login'])){
+        include $path.'Favoris.inc.php';
+
+        if (!isset($Favoris)) $Favoris = array();
+        if (empty($Favoris[$_SESSION['Login']])) $Favoris[$_SESSION['Login']] = array();
+
+        foreach ($ListId as $idFav){
+            if (!in_array($idFav, $Favoris[$_SESSION['Login']]))
+                $Favoris[$_SESSION['Login']][] = $idFav;
+        }
+
+        RWFav($Favoris);
+        return true;
+    }
+    return false;
+};
+
 function modFav($idCocktail){
-    if (IsFav($idCocktail)){
+    if (IsFav($idCocktail)) {
         delFav($idCocktail);
         return "del";
-    }
-    else {
+    }else {
         addFav($idCocktail);
         return "add";
     }

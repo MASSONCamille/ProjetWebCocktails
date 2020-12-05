@@ -29,6 +29,11 @@ if (isset($_POST["submit"])){
 
     if(empty($error)){
         $_SESSION['Login'] = $login;
+        if (!empty($_SESSION["favoris"])) {
+            include 'script/Favoris.funct.php';
+            TransfertFav($_SESSION["favoris"]);
+            unset($_SESSION["favoris"]);
+        }
         header('Location: Accueil.php');
     }
 

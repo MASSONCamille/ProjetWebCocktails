@@ -9,23 +9,18 @@ if(empty($_SESSION["Login"]))
 
 include "Utilisateurs.inc.php";
 
-if(!empty($Utilisateurs)) {
-    foreach ($Utilisateurs as $elem){
-        if ($elem['Login'] == $_SESSION["Login"]){
-            $user = $elem;
+$error = array();
+$Submitted = false;
+
+if(isset($_POST['valider']) && isset($Utilisateurs)) {
+    $Submitted = true;
+
+    foreach ($Utilisateurs as $x => $User){
+        if($User["Login"] == $_SESSION["Login"]){
+            $user = $User;
             break;
         }
     }
-    if (empty($user)) header('Location: Accueil.php');
-}else header('Location: Accueil.php');
-
-
-$error = array();
-$Submitted = false;
-$InscritBon = false;
-
-if(isset($_POST['submit'])) {
-    $Submitted = true;
 
     if(isset($_POST["Login"])) {
         $Login = trim($_POST["Login"]);
@@ -34,7 +29,7 @@ if(isset($_POST['submit'])) {
         }
         else {
             foreach($Utilisateurs as $User) {
-                if($User['Login'] == $Login) {
+                if($User['Login'] == $Login && $User['Login'] != $_SESSION["Login"]) {
                     $error["Login"] = "Nom d'utilisateur déjà utilisé.";
                 }
             }
@@ -43,22 +38,22 @@ if(isset($_POST['submit'])) {
         $error["Login"] = "Nom d'utilisateur nécessaire.";
     }
 
-    if(isset($_POST["Mdp"])) {
+    if(!empty($_POST["Mdp"])) {
         $Mdp = $_POST["Mdp"];
         if(strlen(str_replace(' ', '', $Mdp)) < 3) {
             $error["Mdp"] = "Le mot de passe doit au moins contenir 3 lettres.";
         }
     } else {
-        $error["Mdp"] = "Mot de passe nécessaire.";
+        $Mdp = $user["Mdp"];
     }
 
-    if(isset($_POST["MdpConf"])) {
+    if(!empty($_POST["MdpConf"])) {
         $ConfMdp = $_POST["MdpConf"];
         if($ConfMdp !== $Mdp) {
             $error["MdpConf"] = "Les mots de passes doivent correspondre.";
         }
     } else {
-        $error["MdpConf"] = "Confirmation du mot de passe nécessaire.";
+        $ConfMdp = $user["Mdp"];
     }
 
     if(isset($_POST["Nom"])) {
@@ -111,8 +106,8 @@ if(isset($_POST['submit'])) {
         }
     }
 
-    if(isset($_POST["CodePost"])) {
-        $CodePostale = trim($_POST["CodePost"]);
+    if(isset($_POST["CodePostale"])) {
+        $CodePostale = trim($_POST["CodePostale"]);
         if(!preg_match("/^[0-9]{0,5}$/",$CodePostale) && $CodePostale != "") {
             $error["CodePost"] = "Code postale incorrect.";
         }
@@ -133,8 +128,7 @@ if(isset($_POST['submit'])) {
     }
 }
 
-if($Submitted && empty($error)) {
-    $_SESSION['Login'] = $Login;
+if(empty($error) && $Submitted) {
     $NouvUtilisateur = array (
         "Login" => $Login,
         "Mdp" => $Mdp,
@@ -159,7 +153,16 @@ if($Submitted && empty($error)) {
         $NouvUtilisateur['Ville'] = $Ville;
     if($Numero != "")
         $NouvUtilisateur['Numero'] = $Numero;
+
+    foreach ($Utilisateurs as $x => $User){
+        if($User["Login"] == $_SESSION["Login"]){
+            unset($Utilisateurs[$x]);
+            break;
+        }
+    }
+
     array_push($Utilisateurs, $NouvUtilisateur);
+
     $buffer = "<?php\n\$Utilisateurs = array(\n";
     foreach ($Utilisateurs as $x => $User) {
         $buffer .= "\t'".$x."' => array(\n";
@@ -173,8 +176,42 @@ if($Submitted && empty($error)) {
     $fileUser = fopen('Utilisateurs.inc.php', 'w');
     fwrite($fileUser, $buffer);
     fclose($fileUser);
-    $InscritBon = true;
+
+    if ($NouvUtilisateur["Login"] != $user["Login"]){
+        include "Favoris.inc.php";
+        if (isset($Favoris)){
+            $Favoris[$NouvUtilisateur["Login"]] = $Favoris[$user["Login"]];
+            unset($Favoris[$user["Login"]]);
+        }
+        $buffer = "<?php\n\$Favoris = array(\n";
+        foreach ($Favoris as $x => $fav) {
+            $buffer .= "\t'".$x."' =>array(\n";
+            foreach ($fav as $y => $item) {
+                $buffer .= "\t\t".$y." => ".$item.",\n";
+            }
+            $buffer .= "\t),\n";
+        };
+        $buffer .= ");\n?>";
+
+        $filefav = fopen('Favoris.inc.php', 'w');
+        fwrite($filefav, $buffer);
+        fclose($filefav);
+    }
+
+    $_SESSION['Login'] = $Login;
 }
+
+
+if(!empty($Utilisateurs)) {
+    foreach ($Utilisateurs as $elem){
+        if ($elem['Login'] == $_SESSION["Login"]){
+            $user = $elem;
+            break;
+        }
+    }
+    if (empty($user)) header('Location: Accueil.php');
+}else header('Location: Accueil.php');
+
 ?>
 
 
@@ -182,7 +219,7 @@ if($Submitted && empty($error)) {
 <html>
 
     <head>
-        <title>Connexion</title>
+        <title>Utilisateur</title>
         <meta charset="utf-8" />
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="script/verif_form.js"></script>
@@ -210,7 +247,7 @@ if($Submitted && empty($error)) {
 
         <h2>Information utilisateur :</h2>
 
-        <div id="div_affichage">
+        <div id="div_affichage" <?php if(!empty($error)) echo "hidden";?>>
             <table>
                 <tr>
                     <td>Login : </td>
@@ -276,31 +313,47 @@ if($Submitted && empty($error)) {
             <button id="changer_vue">Modifier</button>
         </div>
 
-        <div id="div_form" hidden>
+        <div id="div_form" <?php if(empty($error)) echo "hidden";?>>
             <form action="Utilisateur.php" method="post">
                 <table>
                     <tr>
                         <td><label for="Login">Login : </label></td>
                         <td><input type="text" name="Login" id="Login"
                                    value="<?php echo $user["Login"];?>"</td>
+                        <?php if(!empty($error["Login"])) { ?>
+                            <td><span><?php echo $error["Login"]; ?></span></td>
+                        <?php } ?>
                     </tr>
                     <tr>
                         <td><label for="Mdp">Nouveau mot de passe : </label></td>
                         <td><input type="password" name="Mdp" id="Mdp"</td>
+                        <td><img src="images/eye.png" id="viewpw" alt="afficher mot de passe" width="30px" border="1"></td>
+                        <?php if(!empty($error["Mdp"])) { ?>
+                            <td><span><?php echo $error["Mdp"]; ?></span></td>
+                        <?php } ?>
                     </tr>
                     <tr>
                         <td><label for="MdpConf">Confirmer le nouveau mot de passe : </label></td>
                         <td><input type="password" name="MdpConf" id="MdpConf"</td>
+                        <?php if(!empty($error["MdpConf"])) { ?>
+                            <td><span><?php echo $error["MdpConf"]; ?></span></td>
+                        <?php } ?>
                     </tr>
                     <tr>
                         <td><label for="Nom">Nom : </label></td>
                         <td><input type="text" name="Nom" id="Nom"
                                    value="<?php if (!empty($user["Nom"])) echo $user["Nom"];?>"</td>
+                        <?php if(!empty($error["Nom"])) { ?>
+                            <td><span><?php echo $error["Nom"]; ?></span></td>
+                        <?php } ?>
                     </tr>
                     <tr>
                         <td><label for="Prenom">Prénom : </label></td>
                         <td><input type="text" name="Prenom" id="Prenom"
                                    value="<?php if (!empty($user["Prenom"])) echo $user["Prenom"];?>"</td>
+                        <?php if(!empty($error["Prenom"])) { ?>
+                            <td><span><?php echo $error["Prenom"]; ?></span></td>
+                        <?php } ?>
                     </tr>
                     <tr>
                         <td><label for="Sexe">Sexe : </label></td>
@@ -308,41 +361,66 @@ if($Submitted && empty($error)) {
                             <input type="radio" name="Sexe" value="f" <?php if (!empty($user["Sexe"]) && $user['Sexe'] == 'f') echo "checked"; ?>/> Femme
                             <input type="radio" name="Sexe" value="h" <?php if (!empty($user["Sexe"]) && $user['Sexe'] == 'h') echo "checked"; ?>/> Homme
                         </td>
+                        <?php if(!empty($error["Sexe"])) { ?>
+                            <td><span><?php echo $error["Sexe"]; ?></span></td>
+                        <?php } ?>
                     </tr>
                     <tr>
                         <td><label for="Naissance">Date de naissance : </label></td>
-                        <td><input type="text" name="Naissance" id="Naissance"
-                                   value="<?php if (!empty($user["Naissance"])) echo date('d-m-Y', strtotime($user["Naissance"]));?>"</td>
+                        <td><input type="date" name="Naissance" id="Naissance"
+                                   value="<?php if (!empty($user["Naissance"])) echo date('Y-m-d', strtotime($user["Naissance"]));?>"</td>
+                        <?php if(!empty($error["Naissance"])) { ?>
+                            <td><span><?php echo $error["Naissance"]; ?></span></td>
+                        <?php } ?>
                     </tr>
                     <tr>
                         <td><label for="AdElec">Adresse électronique : </label></td>
-                        <td><input type="text" name="AdElec" id="AdElec"
+                        <td><input type="email" name="AdElec" id="AdElec"
                                    value="<?php if (!empty($user["AdElec"])) echo $user["AdElec"];?>"</td>
+                        <?php if(!empty($error["AdElec"])) { ?>
+                            <td><span><?php echo $error["AdElec"]; ?></span></td>
+                        <?php } ?>
                     </tr>
                     <tr>
                         <td><label for="AdPostale">Adresse postale : </label></td>
-                        <td><input type="text" name="AdPostale" id="AdPostale"
+                        <td><input type="text" name="AdPost" id="AdPost"
                                    value="<?php if (!empty($user["AdPostale"])) echo $user["AdPostale"];?>"</td>
+                        <?php if(!empty($error["AdPost"])) { ?>
+                            <td><span><?php echo $error["AdPost"]; ?></span></td>
+                        <?php } ?>
                     </tr>
                     <tr>
                         <td><label for="CodePostale">Code postal : </label></td>
                         <td><input type="text" name="CodePostale" id="CodePostale"
                                    value="<?php if (!empty($user["CodePostale"])) echo $user["CodePostale"];?>"</td>
+                        <?php if(!empty($error["CodePost"])) { ?>
+                            <td><span><?php echo $error["CodePost"]; ?></span></td>
+                        <?php } ?>
                     </tr>
                     <tr>
                         <td><label for="Ville">Ville : </label></td>
                         <td><input type="text" name="Ville" id="Ville"
                                    value="<?php if (!empty($user["Ville"])) echo $user["Ville"];?>"</td>
+                        <?php if(!empty($error["Ville"])) { ?>
+                            <td><span><?php echo $error["Ville"]; ?></span></td>
+                        <?php } ?>
                     </tr>
                     <tr>
                         <td><label for="Numero">Numéro de téléphone : </label></td>
                         <td><input type="text" name="Numero" id="Numero"
                                    value="<?php if (!empty($user["Numero"])) echo $user["Numero"];?>"</td>
+                        <?php if(!empty($error["Numero"])) { ?>
+                            <td><span><?php echo $error["Numero"]; ?></span></td>
+                        <?php } ?>
                     </tr
                 </table>
-                <input name="valider" type="submit" value="Valider">
+                <tr>
+                    <td><input name="valider" type="submit" value="Valider"><td>
+                </tr>
+                <tr>
+                    <td><button id="changer_vue">Annuler</button></td>
+                </tr>
             </form>
-            <button id="changer_vue">Annuler</button>
         </div>
     </body>
 </html>
