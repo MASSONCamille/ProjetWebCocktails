@@ -1,9 +1,9 @@
 $(function () {
 
-    $("div#div_affichage > button#changer_vue").click(function () {
+    $("div#div_affichage > button#changer_vue").click(function () { // afficher le formulaire
         $.ajax({
             type:'POST',
-            url:'../php/TestMdp.php',
+            url:'../script/php/TestMdp.php',
             data: {
                 mdp: $("input#VerifMdp").val(),
             },
@@ -23,7 +23,7 @@ $(function () {
         });
     });
 
-    $("div#div_form > button#changer_vue").click(function () {
+    $("div#div_form > button#changer_vue").click(function () { // annuler le formulaire
         $("div#div_affichage").show();
         $("div#div_form").hide();
     });

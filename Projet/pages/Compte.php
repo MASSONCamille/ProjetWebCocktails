@@ -1,21 +1,21 @@
 <?php
 session_start();
 
-if(isset($_GET['Deconnexion']) && $_GET['Deconnexion'] == true)
+if(isset($_GET['Deconnexion']) && $_GET['Deconnexion'] == true)     // Deconnexion
     unset($_SESSION['Login']);
 
 if(empty($_SESSION["Login"]))
-    header('Location: Accueil.php');
+    header('Location: Accueil.php');       // Retour a l'Acceuil si non-connecter (pages inaxessible normalement)
 
 include "../donnees/Utilisateurs.inc.php";
 
-$error = array();
+$error = array();       // liste d'erreurs
 $Submitted = false;
 
 if(isset($_POST['valider']) && isset($Utilisateurs)) {
     $Submitted = true;
 
-    foreach ($Utilisateurs as $x => $User){
+    foreach ($Utilisateurs as $x => $User){         // existance de l'utilisateur
         if($User["Login"] == $_SESSION["Login"]){
             $user = $User;
             break;
@@ -177,25 +177,15 @@ if(empty($error) && $Submitted) {
     fwrite($fileUser, $buffer);
     fclose($fileUser);
 
-    if ($NouvUtilisateur["Login"] != $user["Login"]){
+    if ($NouvUtilisateur["Login"] != $user["Login"]){  // changement du login dans Favori
         include "../donnees/Favoris.inc.php";
         if (isset($Favoris)){
             $Favoris[$NouvUtilisateur["Login"]] = $Favoris[$user["Login"]];
             unset($Favoris[$user["Login"]]);
         }
-        $buffer = "<?php\n\$Favoris = array(\n";
-        foreach ($Favoris as $x => $fav) {
-            $buffer .= "\t'".$x."' =>array(\n";
-            foreach ($fav as $y => $item) {
-                $buffer .= "\t\t".$y." => ".$item.",\n";
-            }
-            $buffer .= "\t),\n";
-        };
-        $buffer .= ");\n?>";
 
-        $filefav = fopen('../donnees/Favoris.inc.php', 'w');
-        fwrite($filefav, $buffer);
-        fclose($filefav);
+        include "../script/Favoris.funct.php";
+        RWFav($Favoris);
     }
 
     $_SESSION['Login'] = $Login;

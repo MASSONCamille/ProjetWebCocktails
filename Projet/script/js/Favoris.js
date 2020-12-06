@@ -1,11 +1,11 @@
 $(function () {
-    $("div#div_fav").load("../php/ListFav.php");
+    $("div#div_fav").load("../script/php/ListeFav.php"); // recuperer le list
 
-    $(document).on('click', '.btnsupp', function () {
+    $(document).on('click', '.btnsupp', function () { // supprimer un favori
         var idCocktail = this.id;
         $.ajax({
             type:'POST',
-            url:'../php/Favoris.funct.php',
+            url:'../script/php/Favoris.funct.php',
             data: {
                 mode: "del",
                 id: idCocktail,
@@ -17,6 +17,6 @@ $(function () {
                 console.log("error");
             },
         });
-        $("div#div_fav").load("../php/ListFav.php");
+        $("div#div_fav").load("../script/php/ListeFav.php");
     });
 });

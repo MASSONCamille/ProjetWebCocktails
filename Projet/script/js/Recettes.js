@@ -1,8 +1,8 @@
 $(function () {
 
-    $.ajax({
+    $.ajax({    // definition du bouton
         type:'POST',
-        url:'../php/Favoris.funct.php',
+        url:'../script/php/Favoris.funct.php',
         data: {
             mode: "test",
             id: idCocktail,
@@ -17,10 +17,10 @@ $(function () {
     });
 
 
-    $("#btn_fav").click(function () {
+    $("#btn_fav").click(function () { // changer le valeur en favori
         $.ajax({
             type:'POST',
-            url:'../php/Favoris.funct.php',
+            url:'../script/php/Favoris.funct.php',
             data: {
                 mode: "mod",
                 id: idCocktail,

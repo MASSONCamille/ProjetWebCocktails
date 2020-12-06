@@ -1,4 +1,5 @@
 <?php
-	$Favoris = array(
-	);
+$Favoris = array(
+
+);
 ?>
