@@ -67,7 +67,7 @@
                 $('#sansIngredient').prop("disabled", true);
                 $('#optionsCompletion').empty(); //Vidage de la datalist
                 if($(this).val().trim() !== "") {
-                    $.get("script/get_tags_recherche.php?DebutRecherche="+$(this).val(), function(Data) { //On récupère la liste en envoyant le nom au php
+                    $.get("../script/php/Criteres.php?DebutRecherche="+$(this).val(), function(Data) { //On récupère la liste en envoyant le nom au php
                         var Liste = JSON.parse(Data);
                         var ListeRecherche = $.map(Liste, function(Val,i){return Val.toLowerCase();}); //On crée des listes de recherches à partir des listes des critères et de la liste du php
                         var ListeRechercheAvec = $.map(ListeAvecIngredient, function(Val,i){return Val.toLowerCase();});
@@ -91,12 +91,12 @@
                 TableAffiche = $('#ResultatsRecherche table > tbody');
                 TableAffiche.empty();
                 $.each(ResTable, function(Cle, Valeur) {
-                    TableAffiche.append("<tr><td>"+Valeur['Nom']+"</td><td>"+Valeur['Score']+"</td></tr>");
+                    TableAffiche.append("<tr><td><a href='Recettes.php?Recette="+Cle+"'>"+Valeur['Nom']+"</a></td><td>"+Valeur['Score']+"</td></tr>");
                 });
             }
 
             $.fn.rechercheRecettesCriteres = function() { //Fonction qui envoie les listes de critères et puis reçoit la liste réponse de la recherche
-                $.post("script/recherche_recettes_criteres.php", { 'IngredientsAvec': ListeAvecIngredient, 'IngredientsSans': ListeSansIngredient }, function(Data) {
+                $.post("../script/php/RechercheRecettesCriteres.php", { 'IngredientsAvec': ListeAvecIngredient, 'IngredientsSans': ListeSansIngredient }, function(Data) {
                     $(this).afficherRecettesResultats(Data);
                 }, "json").fail(function(Data) {
                     console.log(Data.responseText);
