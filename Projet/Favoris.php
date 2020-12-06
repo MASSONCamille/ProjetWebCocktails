@@ -1,14 +1,10 @@
 <?php
-
-    include 'Donnees.inc.php';
-    include 'Favoris.inc.php';
-
     session_start();
 
-    if(isset($_GET['Deconnexion']) && $_GET['Deconnexion'] == true)
+    if(isset($_GET['Deconnexion']) && $_GET['Deconnexion'] == true) // Deconnexion
         unset($_SESSION['Login']);
 
-    $_SESSION['CheminAcces'] = "Favoris";
+    $_SESSION['CheminAcces'] = "Favoris";       // pour initialiser le fils d'Ariane dans Recette
 
 ?>
 
@@ -35,13 +31,15 @@
                     <li><a href="Inscription.php">S'inscrire</a></li>
                 <?php }
                 if(isset($_SESSION['Login']) && $_SESSION['Login'] !== "") { ?>
-                    <li><a href="Utilisateur.php">Mon compte</a></li> <!-- Dans le si connecter -->
+                    <li><a href="Utilisateur.php">Mon compte</a></li>
                     <li><a href="<?php echo $_SERVER['PHP_SELF']."?Deconnexion=true"; ?>">Se déconnecter</a></li>
                 <?php } ?>
             </ul>
         </header>
 
-        <div id="div_fav">
+        <h2>Liste des Favoris</h2>
+
+        <div id="div_fav"> <!-- Affichage de la liste des Favoris en dynamique (Remplie par le JQuery) -->
         </div>
 
     </body>

@@ -12,8 +12,8 @@
         $id = 0;
     }
 
-    $CheminAcces = $_SESSION['CheminAcces'];
-    $VientDeFavoris = is_string($CheminAcces);
+    $CheminAcces = $_SESSION['CheminAcces'];        // recuperation du fils d'Ariane
+    $VientDeFavoris = is_string($CheminAcces);      // si vien de Favoris
 
 
 function remove_accent($str) //Fonction de remplacement des accents

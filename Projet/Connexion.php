@@ -1,40 +1,40 @@
 <?php
 session_start();
 
-if(isset($_GET['Deconnexion']) && $_GET['Deconnexion'] == true)
+if(isset($_GET['Deconnexion']) && $_GET['Deconnexion'] == true)     // Deconnexion
         unset($_SESSION['Login']);
 
-if (isset($_POST["submit"])){
+if (isset($_POST["submit"])){       // si le formulaire a etait validé
 
-    $login = str_replace(' ', '', htmlspecialchars($_POST["Login"]));
+    $login = str_replace(' ', '', htmlspecialchars($_POST["Login"])); // recuperation de login et mdp
     $mdp = str_replace(' ', '', htmlspecialchars($_POST["Mdp"]));
 
-    $error = array();
+    $error = array(); // initialisation de la variable des erreur
 
-    if(empty($login)) $error["Login"] = "Doit etre remplie";
-    if(empty($mdp)) $error["Mdp"] = "Doit etre remplie";
+    if(empty($login)) $error["Login"] = "Doit etre remplie";    // test si Login est vide
+    if(empty($mdp)) $error["Mdp"] = "Doit etre remplie";        // test si mdp est vide
 
     include "Utilisateurs.inc.php";
 
-    if(!empty($Utilisateurs) && empty($error)) {
+    if(!empty($Utilisateurs) && empty($error)) {        // verification pour le login est le mdp
         foreach ($Utilisateurs as $user){
             if ($user['Login'] == $login){
                 $flag = true;               //Utilisateur existant
-                if ($user['Mdp'] != $mdp) $error["Mdp"] = "Mot de passe incorrect";
+                if ($user['Mdp'] != $mdp) $error["Mdp"] = "Mot de passe incorrect"; // test le mdp
                 break;
             }
         }
         if (empty($flag)) $error["Login"] = "Login inconnu";
-    }elseif (empty($error)) $error["Connexion"] = "Verification impossible";
+    }elseif (empty($error)) $error["Connexion"] = "Verification impossible";    // si dans l'include
 
-    if(empty($error)){
-        $_SESSION['Login'] = $login;
-        if (!empty($_SESSION["favoris"])) {
+    if(empty($error)){      // si le formulaire ne contient aucune erreurs
+        $_SESSION['Login'] = $login;    // initialisation du Login en session
+        if (!empty($_SESSION["favoris"])) { // recuperation des Favoris enregistrer en mode non-Connecter
             include 'script/Favoris.funct.php';
             TransfertFav($_SESSION["favoris"]);
             unset($_SESSION["favoris"]);
         }
-        header('Location: Accueil.php');
+        header('Location: Accueil.php'); // redirection vers l'acceuil
     }
 
 }
@@ -63,7 +63,7 @@ if (isset($_POST["submit"])){
                     <li><a href="Inscription.php">S'inscrire</a></li>
                 <?php }
                 if(isset($_SESSION['Login']) && $_SESSION['Login'] !== "") { ?>
-                    <li><a href="Utilisateur.php">Mon compte</a></li> <!-- Dans le si connecter -->
+                    <li><a href="Utilisateur.php">Mon compte</a></li>
                     <li><a href="<?php echo $_SERVER['PHP_SELF']."?Deconnexion=true"; ?>">Se déconnecter</a></li>
                 <?php } ?>
             </ul>
@@ -79,7 +79,7 @@ if (isset($_POST["submit"])){
                         <td><input type="text" name="Login" id="Login" required="required" value="<?php if (isset($_POST['submit'])) echo $login; ?>"</td>
                     </tr>
                     <?php if(!empty($error["Login"])) {?>
-                    <tr><td><?php echo $error["Login"];?></td></tr>
+                    <tr><td><?php echo $error["Login"];?></td></tr>  <!-- affichage des erreurs -->
                     <?php }?>
 
                     <tr>
@@ -88,14 +88,14 @@ if (isset($_POST["submit"])){
                         <td><img src="images/eye.png" id="viewpw" alt="afficher mot de passe" width="30px" border="1"></td>
                     </tr>
                     <?php if(!empty($error["Mdp"])) {?>
-                        <tr><td><?php echo $error["Mdp"];?></td></tr>
+                        <tr><td><?php echo $error["Mdp"];?></td></tr>  <!-- affichage des erreurs -->
                     <?php }?>
 
                     <tr>
                         <td colspan="3"><input type="submit" value="Valider" name="submit"></td>
                     </tr>
                     <?php if(!empty($error["Connexion"])) {?>
-                        <tr><td><?php echo $error["Connexion"];?></td></tr>
+                        <tr><td><?php echo $error["Connexion"];?></td></tr>  <!-- affichage des erreurs -->
                     <?php }?>
                 </table>
             </form>
