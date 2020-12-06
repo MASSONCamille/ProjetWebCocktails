@@ -1,5 +1,4 @@
 <?php
-
     /** Function qui reecri le fichier mémoire de favori */
 function RWFav($Favoris){
     if (dirname($_SERVER['PHP_SELF']) == '/ProjetCocktails/Projet/script') $path = '../'; // Verification du lien
@@ -23,38 +22,40 @@ function RWFav($Favoris){
 
     /** Function de test pour savoir si un cocktail est favori  */
 function IsFav($idCocktail){
-    if (dirname($_SERVER['PHP_SELF']) == '/ProjetCocktails/Projet/script') $path = '../';
+    if (dirname($_SERVER['PHP_SELF']) == '/ProjetCocktails/Projet/script') $path = '../';   // idem ligne 4
     else $path  = '';
 
-    if (session_status() != PHP_SESSION_ACTIVE) session_start();
-    if(isset($_SESSION['Login'])){ // Utilisateur connecter
-        include $path.'Favoris.inc.php';
-        if (isset($Favoris)) return in_array($idCocktail, $Favoris[$_SESSION['Login']]);
+    if (session_status() != PHP_SESSION_ACTIVE) session_start();               // assure le session_start
 
-    }else{ // Utilisateur non connecter
-        if(isset($_SESSION['favoris'])) return in_array($idCocktail, $_SESSION['favoris']);
+    if(isset($_SESSION['Login'])){                                             // Utilisateur connecter
+        include $path.'Favoris.inc.php';
+        if (isset($Favoris)) return in_array($idCocktail, $Favoris[$_SESSION['Login']]);    // test varible du fichier
+
+    }else{                                                                     // Utilisateur non connecter
+        if(isset($_SESSION['favoris'])) return in_array($idCocktail, $_SESSION['favoris']); // test varible de session
     }
 
     return false;
 };
 
 
-
     /** Function d'ajout en favori  */
 function addFav($idCocktail){
-    if (dirname($_SERVER['PHP_SELF']) == '/ProjetCocktails/Projet/script') $path = '../';
+    if (dirname($_SERVER['PHP_SELF']) == '/ProjetCocktails/Projet/script') $path = '../';   // idem ligne 4
     else $path  = '';
 
-    if (session_status() != PHP_SESSION_ACTIVE) session_start();
+    if (session_status() != PHP_SESSION_ACTIVE) session_start();                // assure le session_start
     if (IsFav($idCocktail)) return false;
-    if(isset($_SESSION['Login'])){ // Utilisateur connecter
+
+    if(isset($_SESSION['Login'])){                                              // Utilisateur connecter
         include $path.'Favoris.inc.php';
         if (!isset($Favoris)) $Favoris = array();
         if (empty($Favoris[$_SESSION['Login']])) $Favoris[$_SESSION['Login']] = array();
-        $Favoris[$_SESSION['Login']][] = $idCocktail;
-        RWFav($Favoris);
-    }else{ // Utilisateur non connecter
-        if(!isset($_SESSION['favoris'])) $_SESSION['favoris'] = array();
+
+        $Favoris[$_SESSION['Login']][] = $idCocktail;                           // modif varible du fichier
+        RWFav($Favoris);                                                        // reecri le fichier
+    }else{                                                                      // Utilisateur non connecter
+        if(!isset($_SESSION['favoris'])) $_SESSION['favoris'] = array();        // modif varible de session
         $_SESSION['favoris'][] = $idCocktail;
     }
     return true;
@@ -63,30 +64,31 @@ function addFav($idCocktail){
 
     /** Function de suppression d'un favori */
 function delFav($idCocktail){
-    if (dirname($_SERVER['PHP_SELF']) == '/ProjetCocktails/Projet/script') $path = '../';
+    if (dirname($_SERVER['PHP_SELF']) == '/ProjetCocktails/Projet/script') $path = '../';   // idem ligne 4
     else $path  = '';
 
-    if (session_status() != PHP_SESSION_ACTIVE) session_start();
+    if (session_status() != PHP_SESSION_ACTIVE) session_start();                    // assure le session_start
     if (!IsFav($idCocktail)) return false;
-    if(isset($_SESSION['Login'])){ // Utilisateur connecter
+
+    if(isset($_SESSION['Login'])){                                                  // Utilisateur connecter
         include $path.'Favoris.inc.php';
         if (!isset($Favoris)) return false;
-        unset($Favoris[$_SESSION['Login']][array_search($idCocktail, $Favoris[$_SESSION['Login']])]);
-        RWFav($Favoris);
-    }else{ // Utilisateur non connecter
-        if(!isset($_SESSION['favoris'])) $_SESSION['favoris'] = array();
+        unset($Favoris[$_SESSION['Login']][array_search($idCocktail, $Favoris[$_SESSION['Login']])]);   // modif varible du fichier
+        RWFav($Favoris);                                                                    // reecri le fichier
+    }else{                                                                          // Utilisateur non connecter
+        if(!isset($_SESSION['favoris'])) $_SESSION['favoris'] = array();                // modif varible de session
         unset($_SESSION['favoris'][array_search($idCocktail, $_SESSION['favoris'])]);
     }
     return true;
 };
 
 
-    /** Function qui  */
+    /** Function qui recupere tout les favoris hors connexion pour les mettres dans le fichier mémoire */
 function TransfertFav($ListId){
-    if (dirname($_SERVER['PHP_SELF']) == '/ProjetCocktails/Projet/script') $path = '../';
+    if (dirname($_SERVER['PHP_SELF']) == '/ProjetCocktails/Projet/script') $path = '../';   // idem ligne 4
     else $path  = '';
 
-    if (session_status() != PHP_SESSION_ACTIVE) session_start();
+    if (session_status() != PHP_SESSION_ACTIVE) session_start();            // assure le session_start
 
     if(isset($_SESSION['Login'])){
         include $path.'Favoris.inc.php';
@@ -94,19 +96,21 @@ function TransfertFav($ListId){
         if (!isset($Favoris)) $Favoris = array();
         if (empty($Favoris[$_SESSION['Login']])) $Favoris[$_SESSION['Login']] = array();
 
-        foreach ($ListId as $idFav){
+        foreach ($ListId as $idFav){                                        // modif varible du fichier
             if (!in_array($idFav, $Favoris[$_SESSION['Login']]))
                 $Favoris[$_SESSION['Login']][] = $idFav;
         }
 
-        RWFav($Favoris);
+        RWFav($Favoris);                                                    // reecri le fichier
         return true;
     }
     return false;
 };
 
+
+    /** Function de modification (Favori/pas Favori) d'un favori */
 function modFav($idCocktail){
-    if (IsFav($idCocktail)) {
+    if (IsFav($idCocktail)) {           // test si à supprimer ou a ajouter
         delFav($idCocktail);
         return "del";
     }else {
@@ -115,11 +119,11 @@ function modFav($idCocktail){
     }
 }
 
-        // en cas d'appel avec un JQuery
+        /** En cas d'appel avec un JQuery/Ajax */
 if (!empty($_POST["mode"])){
     if ($_POST["mode"] == "del") echo delFav($_POST["id"]);
     else if($_POST["mode"] == "add") echo addFav($_POST["id"]);
     else if($_POST["mode"] == "mod") echo modFav($_POST["id"]);
     else if($_POST["mode"] == "test") echo IsFav($_POST["id"]);
-    else echo "Error mode";
+    else echo "Error mode";                                         // NOTE: TransfertFav non utiliser pas le JQuery
 }
