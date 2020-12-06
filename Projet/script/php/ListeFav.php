@@ -1,9 +1,9 @@
 <?php
-include '../Donnees.inc.php';
+include '../../donnees/Donnees.inc.php';
 if (session_status() != PHP_SESSION_ACTIVE) session_start();
 
 if (isset($_SESSION['Login'])){
-    include '../Favoris.inc.php';
+    include '../../donnees/Favoris.inc.php';
 
     if (isset($Favoris[$_SESSION["Login"]])) $Fav = $Favoris[$_SESSION['Login']];
     else $Fav = array();

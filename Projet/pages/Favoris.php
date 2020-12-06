@@ -14,9 +14,9 @@
     <head>
         <title>Cocktails Favoris</title>
         <meta charset="utf-8" />
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="../CSS/style.css">
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="script/Favoris.js"></script>
+        <script src="../script/js/Favoris.js"></script>
     </head>
 
     <body>
@@ -31,7 +31,7 @@
                     <li><a href="Inscription.php">S'inscrire</a></li>
                 <?php }
                 if(isset($_SESSION['Login']) && $_SESSION['Login'] !== "") { ?>
-                    <li><a href="Utilisateur.php">Mon compte</a></li>
+                    <li><a href="Compte.php">Mon compte</a></li>
                     <li><a href="<?php echo $_SERVER['PHP_SELF']."?Deconnexion=true"; ?>">Se déconnecter</a></li>
                 <?php } ?>
             </ul>

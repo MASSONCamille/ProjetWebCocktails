@@ -7,7 +7,7 @@ if(isset($_GET['Deconnexion']) && $_GET['Deconnexion'] == true)
 if(empty($_SESSION["Login"]))
     header('Location: Accueil.php');
 
-include "Utilisateurs.inc.php";
+include "../donnees/Utilisateurs.inc.php";
 
 $error = array();
 $Submitted = false;
@@ -173,12 +173,12 @@ if(empty($error) && $Submitted) {
     };
     $buffer .= ");\n?>";
 
-    $fileUser = fopen('Utilisateurs.inc.php', 'w');
+    $fileUser = fopen('../donnees/Utilisateurs.inc.php', 'w');
     fwrite($fileUser, $buffer);
     fclose($fileUser);
 
     if ($NouvUtilisateur["Login"] != $user["Login"]){
-        include "Favoris.inc.php";
+        include "../donnees/Favoris.inc.php";
         if (isset($Favoris)){
             $Favoris[$NouvUtilisateur["Login"]] = $Favoris[$user["Login"]];
             unset($Favoris[$user["Login"]]);
@@ -193,7 +193,7 @@ if(empty($error) && $Submitted) {
         };
         $buffer .= ");\n?>";
 
-        $filefav = fopen('Favoris.inc.php', 'w');
+        $filefav = fopen('../donnees/Favoris.inc.php', 'w');
         fwrite($filefav, $buffer);
         fclose($filefav);
     }
@@ -221,10 +221,10 @@ if(!empty($Utilisateurs)) {
     <head>
         <title>Utilisateur</title>
         <meta charset="utf-8"/>
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="../CSS/style.css">
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="script/verif_form.js"></script>
-        <script src="script/Utilisateur.js"></script>
+        <script src="../script/js/VerifForm.js"></script>
+        <script src="../script/js/Utilisateur.js"></script>
     </head>
 
     <body>
@@ -239,7 +239,7 @@ if(!empty($Utilisateurs)) {
                     <li><a href="Inscription.php">S'inscrire</a></li>
                 <?php }
                 if(isset($_SESSION['Login']) && $_SESSION['Login'] !== "") { ?>
-                    <li><a href="Utilisateur.php">Mon compte</a></li>
+                    <li><a href="Compte.php">Mon compte</a></li>
                     <li><a href="<?php echo $_SERVER['PHP_SELF']."?Deconnexion=true"; ?>">Se déconnecter</a></li>
                 <?php } ?>
             </ul>
@@ -314,27 +314,27 @@ if(!empty($Utilisateurs)) {
         </div>
 
         <div id="div_form" <?php if(empty($error)) echo "hidden";?>>
-            <form action="Utilisateur.php" method="post">
+            <form action="Compte.php" method="post">
                 <table>
                     <tr>
                         <td><label for="Login">Login : </label></td>
                         <td><input type="text" name="Login" id="Login"
-                                   value="<?php echo $user["Login"];?>"</td>
+                                   value="<?php echo $user["Login"];?>"></td>
                         <?php if(!empty($error["Login"])) { ?>
                             <td><span><?php echo $error["Login"]; ?></span></td>
                         <?php } ?>
                     </tr>
                     <tr>
                         <td><label for="Mdp">Nouveau mot de passe : </label></td>
-                        <td><input type="password" name="Mdp" id="Mdp"</td>
-                        <td><img src="images/eye.png" id="viewpw" alt="afficher mot de passe" width="30px" border="1"></td>
+                        <td><input type="password" name="Mdp" id="Mdp"></td>
+                        <td><img src="../images/eye.png" id="viewpw" alt="afficher mot de passe" width="30px" border="1"></td>
                         <?php if(!empty($error["Mdp"])) { ?>
                             <td><span><?php echo $error["Mdp"]; ?></span></td>
                         <?php } ?>
                     </tr>
                     <tr>
                         <td><label for="MdpConf">Confirmer le nouveau mot de passe : </label></td>
-                        <td><input type="password" name="MdpConf" id="MdpConf"</td>
+                        <td><input type="password" name="MdpConf" id="MdpConf"></td>
                         <?php if(!empty($error["MdpConf"])) { ?>
                             <td><span><?php echo $error["MdpConf"]; ?></span></td>
                         <?php } ?>
@@ -342,7 +342,7 @@ if(!empty($Utilisateurs)) {
                     <tr>
                         <td><label for="Nom">Nom : </label></td>
                         <td><input type="text" name="Nom" id="Nom"
-                                   value="<?php if (!empty($user["Nom"])) echo $user["Nom"];?>"</td>
+                                   value="<?php if (!empty($user["Nom"])) echo $user["Nom"];?>"></td>
                         <?php if(!empty($error["Nom"])) { ?>
                             <td><span><?php echo $error["Nom"]; ?></span></td>
                         <?php } ?>
@@ -350,7 +350,7 @@ if(!empty($Utilisateurs)) {
                     <tr>
                         <td><label for="Prenom">Prénom : </label></td>
                         <td><input type="text" name="Prenom" id="Prenom"
-                                   value="<?php if (!empty($user["Prenom"])) echo $user["Prenom"];?>"</td>
+                                   value="<?php if (!empty($user["Prenom"])) echo $user["Prenom"];?>"></td>
                         <?php if(!empty($error["Prenom"])) { ?>
                             <td><span><?php echo $error["Prenom"]; ?></span></td>
                         <?php } ?>
@@ -368,7 +368,7 @@ if(!empty($Utilisateurs)) {
                     <tr>
                         <td><label for="Naissance">Date de naissance : </label></td>
                         <td><input type="date" name="Naissance" id="Naissance"
-                                   value="<?php if (!empty($user["Naissance"])) echo date('Y-m-d', strtotime($user["Naissance"]));?>"</td>
+                                   value="<?php if (!empty($user["Naissance"])) echo date('Y-m-d', strtotime($user["Naissance"]));?>"></td>
                         <?php if(!empty($error["Naissance"])) { ?>
                             <td><span><?php echo $error["Naissance"]; ?></span></td>
                         <?php } ?>
@@ -376,7 +376,7 @@ if(!empty($Utilisateurs)) {
                     <tr>
                         <td><label for="AdElec">Adresse électronique : </label></td>
                         <td><input type="email" name="AdElec" id="AdElec"
-                                   value="<?php if (!empty($user["AdElec"])) echo $user["AdElec"];?>"</td>
+                                   value="<?php if (!empty($user["AdElec"])) echo $user["AdElec"];?>"></td>
                         <?php if(!empty($error["AdElec"])) { ?>
                             <td><span><?php echo $error["AdElec"]; ?></span></td>
                         <?php } ?>
@@ -384,7 +384,7 @@ if(!empty($Utilisateurs)) {
                     <tr>
                         <td><label for="AdPostale">Adresse postale : </label></td>
                         <td><input type="text" name="AdPost" id="AdPost"
-                                   value="<?php if (!empty($user["AdPostale"])) echo $user["AdPostale"];?>"</td>
+                                   value="<?php if (!empty($user["AdPostale"])) echo $user["AdPostale"];?>"></td>
                         <?php if(!empty($error["AdPost"])) { ?>
                             <td><span><?php echo $error["AdPost"]; ?></span></td>
                         <?php } ?>
@@ -392,7 +392,7 @@ if(!empty($Utilisateurs)) {
                     <tr>
                         <td><label for="CodePostale">Code postal : </label></td>
                         <td><input type="text" name="CodePostale" id="CodePostale"
-                                   value="<?php if (!empty($user["CodePostale"])) echo $user["CodePostale"];?>"</td>
+                                   value="<?php if (!empty($user["CodePostale"])) echo $user["CodePostale"];?>"></td>
                         <?php if(!empty($error["CodePost"])) { ?>
                             <td><span><?php echo $error["CodePost"]; ?></span></td>
                         <?php } ?>
@@ -400,7 +400,7 @@ if(!empty($Utilisateurs)) {
                     <tr>
                         <td><label for="Ville">Ville : </label></td>
                         <td><input type="text" name="Ville" id="Ville"
-                                   value="<?php if (!empty($user["Ville"])) echo $user["Ville"];?>"</td>
+                                   value="<?php if (!empty($user["Ville"])) echo $user["Ville"];?>"></td>
                         <?php if(!empty($error["Ville"])) { ?>
                             <td><span><?php echo $error["Ville"]; ?></span></td>
                         <?php } ?>
@@ -408,11 +408,11 @@ if(!empty($Utilisateurs)) {
                     <tr>
                         <td><label for="Numero">Numéro de téléphone : </label></td>
                         <td><input type="text" name="Numero" id="Numero"
-                                   value="<?php if (!empty($user["Numero"])) echo $user["Numero"];?>"</td>
+                                   value="<?php if (!empty($user["Numero"])) echo $user["Numero"];?>"></td>
                         <?php if(!empty($error["Numero"])) { ?>
                             <td><span><?php echo $error["Numero"]; ?></span></td>
                         <?php } ?>
-                    </tr
+                    </tr>
                 </table>
                 <tr>
                     <td><input name="valider" type="submit" value="Valider"><td>

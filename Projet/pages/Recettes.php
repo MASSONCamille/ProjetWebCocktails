@@ -1,5 +1,5 @@
 <?php
-    include 'Donnees.inc.php';
+    include '../donnees/Donnees.inc.php';
 
     session_start();
 
@@ -43,7 +43,7 @@ function remove_accent($str) //Fonction de remplacement des accents
 
 function titletoimgsrc($str)
 {
-    return "Photos/" . ucfirst(strtolower(
+    return "../Photos/" . ucfirst(strtolower(
                 preg_replace(array('/[^a-zA-Z0-9 -]/', '/[ -]+/', '/^-|-$/'),array('', '_', ''), remove_accent($str))))
         .".jpg";
 }
@@ -55,10 +55,10 @@ function titletoimgsrc($str)
     <head>
         <meta charset="utf-8">
         <title>Recettes Cocktails</title>
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="../CSS/style.css">
         <script> var idCocktail = <?php echo $id;?>; </script>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="script/Recettes.js"></script>
+        <script src="../script/js/Recettes.js"></script>
     </head>
 
     <body>
@@ -73,7 +73,7 @@ function titletoimgsrc($str)
                     <li><a href="Inscription.php">S'inscrire</a></li>
                 <?php }
                 if(isset($_SESSION['Login']) && $_SESSION['Login'] !== "") { ?>
-                    <li><a href="Utilisateur.php">Mon compte</a></li>
+                    <li><a href="Compte.php">Mon compte</a></li>
                     <li><a href="<?php echo $_SERVER['PHP_SELF']."?Deconnexion=true"; ?>">Se déconnecter</a></li>
                 <?php } ?>
             </ul>

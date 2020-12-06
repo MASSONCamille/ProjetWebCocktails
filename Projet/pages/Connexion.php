@@ -14,7 +14,7 @@ if (isset($_POST["submit"])){       // si le formulaire a etait validé
     if(empty($login)) $error["Login"] = "Doit etre remplie";    // test si Login est vide
     if(empty($mdp)) $error["Mdp"] = "Doit etre remplie";        // test si mdp est vide
 
-    include "Utilisateurs.inc.php";
+    include "../donnees/Utilisateurs.inc.php";
 
     if(!empty($Utilisateurs) && empty($error)) {        // verification pour le login est le mdp
         foreach ($Utilisateurs as $user){
@@ -30,7 +30,7 @@ if (isset($_POST["submit"])){       // si le formulaire a etait validé
     if(empty($error)){      // si le formulaire ne contient aucune erreurs
         $_SESSION['Login'] = $login;    // initialisation du Login en session
         if (!empty($_SESSION["favoris"])) { // recuperation des Favoris enregistrer en mode non-Connecter
-            include 'script/Favoris.funct.php';
+            include '../script/php/Favoris.funct.php';
             TransfertFav($_SESSION["favoris"]);
             unset($_SESSION["favoris"]);
         }
@@ -46,9 +46,9 @@ if (isset($_POST["submit"])){       // si le formulaire a etait validé
     <head>
         <title>Connexion</title>
         <meta charset="utf-8" />
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="../CSS/style.css">
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="script/verif_form.js"></script>
+        <script src="../script/js/VerifForm.js"></script>
     </head>
 
     <body>
@@ -63,7 +63,7 @@ if (isset($_POST["submit"])){       // si le formulaire a etait validé
                     <li><a href="Inscription.php">S'inscrire</a></li>
                 <?php }
                 if(isset($_SESSION['Login']) && $_SESSION['Login'] !== "") { ?>
-                    <li><a href="Utilisateur.php">Mon compte</a></li>
+                    <li><a href="Compte.php">Mon compte</a></li>
                     <li><a href="<?php echo $_SERVER['PHP_SELF']."?Deconnexion=true"; ?>">Se déconnecter</a></li>
                 <?php } ?>
             </ul>
@@ -76,7 +76,7 @@ if (isset($_POST["submit"])){       // si le formulaire a etait validé
                 <table>
                     <tr>
                         <td><label for="Login">Login : </label></td>
-                        <td><input type="text" name="Login" id="Login" required="required" value="<?php if (isset($_POST['submit'])) echo $login; ?>"</td>
+                        <td><input type="text" name="Login" id="Login" required="required" value="<?php if (isset($_POST['submit'])) echo $login; ?>"></td>
                     </tr>
                     <?php if(!empty($error["Login"])) {?>
                     <tr><td><?php echo $error["Login"];?></td></tr>  <!-- affichage des erreurs -->
@@ -85,7 +85,7 @@ if (isset($_POST["submit"])){       // si le formulaire a etait validé
                     <tr>
                         <td><label for="Mdp">Mot de passe : </label></td>
                         <td><input type="password" name="Mdp" id="Mdp" required="required" value="<?php if (isset($_POST['submit'])) echo $mdp; ?>"></td>
-                        <td><img src="images/eye.png" id="viewpw" alt="afficher mot de passe" width="30px" border="1"></td>
+                        <td><img src="../images/eye.png" id="viewpw" alt="afficher mot de passe" width="30px" border="1"></td>
                     </tr>
                     <?php if(!empty($error["Mdp"])) {?>
                         <tr><td><?php echo $error["Mdp"];?></td></tr>  <!-- affichage des erreurs -->

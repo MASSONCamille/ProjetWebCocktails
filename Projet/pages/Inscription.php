@@ -1,5 +1,5 @@
 <?php
-    include 'Utilisateurs.inc.php';
+    include '../donnees/Utilisateurs.inc.php';
 
     session_start();
 
@@ -161,13 +161,13 @@
         };
         $buffer .= ");\n?>";
         
-        $fileUser = fopen('Utilisateurs.inc.php', 'w');
+        $fileUser = fopen('../donnees/Utilisateurs.inc.php', 'w');
         fwrite($fileUser, $buffer);
         fclose($fileUser);
         $InscritBon = true;
 
         if (!empty($_SESSION["favoris"])) { //Permet d'ajouter les favoris d'un utilisateur qui vient de s'inscrire s'il en a
-            include 'script/Favoris.funct.php';
+            include '../script/php/Favoris.funct.php';
             TransfertFav($_SESSION["favoris"]);
             unset($_SESSION["favoris"]);
         }
@@ -181,9 +181,9 @@
     <head>
         <title>Inscription</title>
         <meta charset="utf-8" />
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="../CSS/style.css">
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="script/verif_form.js"></script>
+        <script src="../script/js/VerifForm.js"></script>
     </head>
 
     <body>
@@ -198,7 +198,7 @@
                     <li><a href="Inscription.php">S'inscrire</a></li>
                 <?php }
                 if(isset($_SESSION['Login']) && $_SESSION['Login'] !== "") { ?>
-                    <li><a href="Utilisateur.php">Mon compte</a></li>
+                    <li><a href="Compte.php">Mon compte</a></li>
                     <li><a href="<?php echo $_SERVER['PHP_SELF']."?Deconnexion=true"; ?>">Se déconnecter</a></li>
                 <?php } ?>
             </ul>
@@ -226,7 +226,7 @@
                 <td>Mot de passe* :</td>
                 <td><input id="Mdp" type="password" name="mdp" required="required"
                            value="<?php if (isset($_POST['submit']) && empty($error["Mdp"])) echo $_POST['mdp']; ?>" /></td>
-                <td><img src="images/eye.png" id="viewpw" alt="afficher mot de passe" width="30px" border="1"></td>
+                <td><img src="../images/eye.png" id="viewpw" alt="afficher mot de passe" width="30px" border="1"></td>
                 <?php if(!empty($error["Mdp"])) { ?>
                     <td><span><?php echo $error["Mdp"]; ?></span></td>
                 <?php } ?>

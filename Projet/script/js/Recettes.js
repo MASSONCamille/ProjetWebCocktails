@@ -2,7 +2,7 @@ $(function () {
 
     $.ajax({
         type:'POST',
-        url:'script/Favoris.funct.php',
+        url:'../php/Favoris.funct.php',
         data: {
             mode: "test",
             id: idCocktail,
@@ -20,7 +20,7 @@ $(function () {
     $("#btn_fav").click(function () {
         $.ajax({
             type:'POST',
-            url:'script/Favoris.funct.php',
+            url:'../php/Favoris.funct.php',
             data: {
                 mode: "mod",
                 id: idCocktail,

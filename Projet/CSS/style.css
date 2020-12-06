@@ -110,8 +110,12 @@ header ul {
 nav a {
     color: #68441c;
 }
+nav p {
+    margin-left: 3%;
+}
 nav p a {
     color: #b66c18;
+    margin-left: 1px;
 }
 nav p a:hover {
     color: #7e4a0e;
@@ -129,7 +133,7 @@ div {
 div ul {
     margin-left: 5%;
 }
-div p, div input, #RechercheCriteres, nav p a {
+div p, div input, #RechercheCriteres {
     margin-left: 3%;
 }
 div input {

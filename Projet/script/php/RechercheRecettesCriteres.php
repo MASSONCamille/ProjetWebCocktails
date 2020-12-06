@@ -1,6 +1,6 @@
 <?php 
-    include '../Donnees.inc.php';
-    include '../Recherche.funct.php';
+    include '../../donnees/Donnees.inc.php';
+    include '../php/Recherche.funct.php';
 
     $AvecBon = isset($_POST['IngredientsAvec']);
     $SansBon = isset($_POST['IngredientsSans']);

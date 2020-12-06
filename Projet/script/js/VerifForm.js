@@ -14,7 +14,7 @@ $(function () {
         }else{
             $.ajax({
                 type:'POST',
-                url:'script/verif_form.php',
+                url:'../php/VerifForm.php',
                 data: {
                     Login: login,
                 },

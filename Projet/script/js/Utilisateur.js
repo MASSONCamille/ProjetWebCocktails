@@ -3,7 +3,7 @@ $(function () {
     $("div#div_affichage > button#changer_vue").click(function () {
         $.ajax({
             type:'POST',
-            url:'script/TestMdp.php',
+            url:'../php/TestMdp.php',
             data: {
                 mdp: $("input#VerifMdp").val(),
             },

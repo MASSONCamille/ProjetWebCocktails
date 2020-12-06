@@ -1,7 +1,7 @@
 <?php
     //Include des données et fonctions nécessaires aux recherches
-    include 'Donnees.inc.php';
-    include 'Recherche.funct.php';
+    include '../donnees/Donnees.inc.php';
+    include '../script/php/Recherche.funct.php';
 
     session_start();
 
@@ -45,7 +45,7 @@
     <head>
         <title>Accueil</title>
         <meta charset="utf-8" />
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="../CSS/style.css">
 
         <!-- PARTIE JQUERY DE LA PAGE ACCUEIL -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -173,7 +173,7 @@
                     <li><a href="Inscription.php">S'inscrire</a></li>
                 <?php }
                 if(isset($_SESSION['Login']) && $_SESSION['Login'] !== "") { ?>
-                    <li><a href="Utilisateur.php">Mon compte</a></li>
+                    <li><a href="Compte.php">Mon compte</a></li>
                     <li><a href="<?php echo $_SERVER['PHP_SELF']."?Deconnexion=true"; ?>">Se déconnecter</a></li>
                 <?php } ?>
             </ul>
@@ -186,7 +186,7 @@
                     <p>
                         <?php //Affiche le chemin d'accès (en fonction de la hiérarchie)
                             foreach($CheminAcces as $Element) { ?>
-                                <a href="<?php echo $_SERVER['PHP_SELF']."?Position=".$Element; ?>"><?php echo $Element; ?> /</a>
+                                <a href="<?php echo $_SERVER['PHP_SELF']."?Position=".$Element; ?>"><?php echo $Element; ?>/</a>
                         <?php }
                         ?>
                     </p>

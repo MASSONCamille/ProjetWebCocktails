@@ -1,11 +1,11 @@
 $(function () {
-    $("div#div_fav").load("script/ListFav.php");
+    $("div#div_fav").load("../php/ListFav.php");
 
     $(document).on('click', '.btnsupp', function () {
         var idCocktail = this.id;
         $.ajax({
             type:'POST',
-            url:'script/Favoris.funct.php',
+            url:'../php/Favoris.funct.php',
             data: {
                 mode: "del",
                 id: idCocktail,
@@ -17,6 +17,6 @@ $(function () {
                 console.log("error");
             },
         });
-        $("div#div_fav").load("script/ListFav.php");
+        $("div#div_fav").load("../php/ListFav.php");
     });
 });
