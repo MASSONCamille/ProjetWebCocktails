@@ -220,7 +220,8 @@ if(!empty($Utilisateurs)) {
 
     <head>
         <title>Utilisateur</title>
-        <meta charset="utf-8" />
+        <meta charset="utf-8"/>
+        <link rel="stylesheet" href="style.css">
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="script/verif_form.js"></script>
         <script src="script/Utilisateur.js"></script>
@@ -239,7 +240,7 @@ if(!empty($Utilisateurs)) {
                     <li><a href="Inscription.php">S'inscrire</a></li>
                 <?php }
                 if(isset($_SESSION['Login']) && $_SESSION['Login'] !== "") { ?>
-                    <li>Mon compte</li> <!-- Dans le si connecter -->
+                    <li><a href="Utilisateur.php">Mon compte</a></li> <!-- Dans le si connecter -->
                     <li><a href="<?php echo $_SERVER['PHP_SELF']."?Deconnexion=true"; ?>">Se déconnecter</a></li>
                 <?php } ?>
             </ul>

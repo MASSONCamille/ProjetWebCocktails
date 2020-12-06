@@ -63,7 +63,7 @@ if (isset($_POST["submit"])){
                     <li><a href="Inscription.php">S'inscrire</a></li>
                 <?php }
                 if(isset($_SESSION['Login']) && $_SESSION['Login'] !== "") { ?>
-                    <li>Mon compte</li> <!-- Dans le si connecter -->
+                    <li><a href="Utilisateur.php">Mon compte</a></li> <!-- Dans le si connecter -->
                     <li><a href="<?php echo $_SERVER['PHP_SELF']."?Deconnexion=true"; ?>">Se déconnecter</a></li>
                 <?php } ?>
             </ul>

@@ -1,10 +1,11 @@
 <?php
 
+    /** Function qui reecri le fichier mémoire de favori */
 function RWFav($Favoris){
-    if (dirname($_SERVER['PHP_SELF']) == '/ProjetCocktails/Projet/script') $path = '../';
-    else $path  = '';
+    if (dirname($_SERVER['PHP_SELF']) == '/ProjetCocktails/Projet/script') $path = '../'; // Verification du lien
+    else $path  = '';                                                                     // appel JQuery ou include
 
-    $buffer = "<?php\n\$Favoris = array(\n";
+    $buffer = "<?php\n\$Favoris = array(\n";            // initialisation de du buffer a inscrire dans le fichier
     foreach ($Favoris as $x => $fav) {
         $buffer .= "\t'".$x."' =>array(\n";
         foreach ($fav as $y => $item) {
@@ -14,13 +15,13 @@ function RWFav($Favoris){
     };
     $buffer .= ");\n?>";
 
-    $filefav = fopen($path.'Favoris.inc.php', 'w');
+    $filefav = fopen($path.'Favoris.inc.php', 'w');     // ouverture du fichier memoire de favoris
     fwrite($filefav, $buffer);
     fclose($filefav);
 };
 
 
-
+    /** Function de test pour savoir si un cocktail est favori  */
 function IsFav($idCocktail){
     if (dirname($_SERVER['PHP_SELF']) == '/ProjetCocktails/Projet/script') $path = '../';
     else $path  = '';
@@ -39,6 +40,7 @@ function IsFav($idCocktail){
 
 
 
+    /** Function d'ajout en favori  */
 function addFav($idCocktail){
     if (dirname($_SERVER['PHP_SELF']) == '/ProjetCocktails/Projet/script') $path = '../';
     else $path  = '';
@@ -59,7 +61,7 @@ function addFav($idCocktail){
 };
 
 
-
+    /** Function de suppression d'un favori */
 function delFav($idCocktail){
     if (dirname($_SERVER['PHP_SELF']) == '/ProjetCocktails/Projet/script') $path = '../';
     else $path  = '';
@@ -78,6 +80,8 @@ function delFav($idCocktail){
     return true;
 };
 
+
+    /** Function qui  */
 function TransfertFav($ListId){
     if (dirname($_SERVER['PHP_SELF']) == '/ProjetCocktails/Projet/script') $path = '../';
     else $path  = '';
